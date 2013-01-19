@@ -1,6 +1,6 @@
 ﻿/**
  * jQuery.Drag-On v2.2.0
- * @author Serg Usik
+ * @author Dark Heart aka PretorDH
  * @site dragon.deparadox.com
  * MIT license
  */

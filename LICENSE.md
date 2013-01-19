@@ -1,5 +1,5 @@
-Copyright 2013 jQuery Foundation and other contributors
-http://jquery.com/
+Copyright 2013 Serg Usik, Deparadox LLC and other contributors
+http://www.deparadox.com/
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the

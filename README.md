@@ -52,14 +52,14 @@ Dragon - smart scrolling jQuery plugin...
 
 <h1>DragOn - Let´s fly...<h1>
 
-Automatically link the latest version
+<p>Automatically link the latest version</p>
 
 
     <script src="//dragon.deparadox.com/drag-on.js">
     </script>
 
  
-How to use...
+<h3>How to use...</h3>
 
 
     <head>
@@ -75,13 +75,13 @@ How to use...
     </body>
 
 
-Add a class "dragon" only to the root block with the content. Do not 
+<p>Add a class "dragon" only to the root block with the content. Do not 
 add the class to &lt;body&gt;. All block elements with active scrolling 
 inside root element with a class "dragon", will be connected.
-
-Be careful. Event capturing mousedown, between the root and the block 
+</p>
+<p>Be careful.<br/>Event capturing mousedown, between the root and the block 
 with scrolling probably forbid smart scrolling. 
-In this case, you can assign multiple nested root blocks.
+In this case, you can assign multiple nested root blocks.</p>
 
 
     <script> 

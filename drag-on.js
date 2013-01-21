@@ -104,8 +104,7 @@ $.extend({
 		S.bind('mousewheel',S.DragOn.onWhell)
 		 .bind('mousedown',S.DragOn.onHold);	 
 		 
-		console.log('DragOn fly...');
-		Info && Info.log('DragOn fly...<br/>Включена умная прокрутка страницы.');	
+		(Info || console).log('DragOn fly...');	
 	}
 });
 

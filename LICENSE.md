@@ -1,4 +1,4 @@
-Copyright 2013 Serg Usik, Deparadox LLC and other contributors
+Copyright 2013 PretorDH, Deparadox LLC and other contributors
 http://www.deparadox.com/
 
 Permission is hereby granted, free of charge, to any person obtaining

@@ -1,0 +1,37 @@
+{
+    "name": "DragOn",
+    "title": "jQuery DragOn - smart scrolling",
+    "description": "jQuery plugin for correct scrolling mechanics",
+    "keywords": [
+        "scroll",
+        "pan",
+        "whell",
+        "hold",
+        "drag"
+    ],
+    "version": "2.2.0",
+    "author": {
+        "name": "PretorDH, Deparadox LLC and other contributors",
+        "url": "http://dragon.deparadox.com/#about"
+    },
+    "maintainers": [
+        {
+            "name": "PretorDH",
+            "email": "pretordh@deparadox.com",
+            "url": "http://www.deparadox.com"
+        }
+    ],
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "https://github.com/PretorDH/Dragon/blob/master/LICENSE.md"
+        }
+    ],
+    "bugs": "https://github.com/PretorDH/Dragon/issues",
+    "homepage": "http://dragon.deparadox.com",
+    "docs": "http://dragon.deparadox.com/#get",
+    "download": "http://dragon.deparadox.com/drag-on.js",
+    "dependencies": {
+        "jquery": ">=1.8"
+    }
+}

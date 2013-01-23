@@ -91,7 +91,7 @@ $(function () {
 					dx = x - S.holdPos.x; dy = y - S.holdPos.y;
                     S.to = $((this === e.target) ? this : e.target);
 
-                    if (S.DragOn.noButtonHold || e.buttons === 0 || !(e.which + e.button) && (e.buttons != 'undefined')) return S.DragOn.onRelease(e), Info.log('botton'); 	                            //default scroll bar mouseup patch					
+                    if (S.DragOn.noButtonHold || e.buttons === 0 || !(e.which + e.button) && (e.buttons != 'undefined')) return S.DragOn.onRelease(e); 	                            //default scroll bar mouseup patch					
 
                     e.preventDefault(); e.stopPropagation();
 

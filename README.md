@@ -31,7 +31,7 @@ Dragon - smart scrolling jQuery plugin...
         <h2>Customizable scrollbars (in developing)</h2>
         <p>
             User customisable scroll bars on CSS-based in WebKit 
-            and based on JS in all other browsers.
+            and based on JS in most other browsers.
         </p>
     </li>
     <li>

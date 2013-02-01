@@ -17,7 +17,7 @@ $(function () {
         DragOn: function (S, opt) {
             function onPrevent(E) {
                 var e = E || event, et = (e.target && (e.target.tagName || e.target.localName || e.target.nodeName).toLowerCase());
-                return et && (et in { 'input': '', 'textarea': '', 'select': ''} || ($(e.target).attr('href') || $(e.target).parents().attr('href') && (e.stopPropagation && e.stopPropagation(), true)))
+                return et && (et in { 'input': '', 'textarea': '', 'select': '', 'object': ''} || ($(e.target).attr('href') || $(e.target).parents().attr('href') && (e.stopPropagation && e.stopPropagation(), true)))
 				   || (e.preventDefault && e.preventDefault(), e.stopPropagation && e.stopPropagation(), false);
             };
 

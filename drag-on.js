@@ -1,5 +1,5 @@
 ﻿/**
- * jQuery.Drag-On v2.2.1
+ * jQuery.Drag-On v2.2.2
  * @author Dark Heart aka PretorDH
  * @site dragon.deparadox.com
  * MIT license
@@ -71,7 +71,7 @@ $(function () {
                 },
                 onHold: function (e) {
                     var et = (e.target.tagName || e.target.localName || e.target.nodeName).toLowerCase();
-                    if (et in { 'input': '', textarea: '', 'select': '' }) return;
+                    if (et in { 'input': '', 'textarea': '', 'select': '', 'object':'' }) return;
 
                     (e.type == 'mousedown') && (e.preventDefault(), e.stopPropagation());
 

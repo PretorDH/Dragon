@@ -1,7 +1,7 @@
 Dragon
 ======
 
-Dragon - smart scrolling jQuery plugin...
+Dragon - smart scrolling jQuery plugin for correct scrolling mechanics
 
 <ul>
     <li>

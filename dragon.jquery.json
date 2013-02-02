@@ -3,6 +3,9 @@
     "title": "jQuery DragOn - smart scrolling",
     "description": "jQuery plugin for correct scrolling mechanics",
     "keywords": [
+        "ui",
+        "input",
+        "jquery",
         "scroll",
         "pan",
         "wheel",

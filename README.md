@@ -8,6 +8,7 @@ Dragon - smart scrolling jQuery plugin for correct scrolling mechanics
         <h2>Scroll on drag</h2>
         <p>
             Click and drag for scroll content in both direction. 
+            On desktop, like a touch on tablet.
             If cursor move fast, content scrolled fastest.
         </p>
     </li>

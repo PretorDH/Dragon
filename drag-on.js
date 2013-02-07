@@ -1,5 +1,5 @@
 ﻿/**
- * jQuery.Drag-On v2.2.2
+ * jQuery.Drag-On v2.2.4
  * @author Dark Heart aka PretorDH
  * @site dragon.deparadox.com
  * MIT license
@@ -14,14 +14,21 @@ $(function () {
     });
 
     $.extend({
-        DragOn: function (S, opt) {
+        DragOn: function (S, opt) { /* Механика прокрутки */
+            
+            var def = {
+            	exclusion : {'input': '', 'textarea': '', 'select': '', 'object':''},
+            	cursor : 'all-scroll'
+            }
+            
             function onPrevent(E) {
                 var e = E || event, et = (e.target && (e.target.tagName || e.target.localName || e.target.nodeName).toLowerCase());
-                return et && (et in { 'input': '', 'textarea': '', 'select': '', 'object': ''} || ($(e.target).attr('href') || $(e.target).parents().attr('href') && (e.stopPropagation && e.stopPropagation(), true)))
+                return et && (et in S.opt.exclusion  || ($(e.target).attr('href') || $(e.target).parents().attr('href') && (e.stopPropagation && e.stopPropagation(), true)))
 				   || (e.preventDefault && e.preventDefault(), e.stopPropagation && e.stopPropagation(), false);
             };
 
             (S = $(S)).DragOn = {
+            	opt: (function (opt) {for (var b in opt) def[b]=opt[b]; return def;})(opt),
                 getCurPos: function () {
                     var a, b, c, to = S.to;
                     return S.curPos = {
@@ -50,10 +57,10 @@ $(function () {
 							&& (S.to = S.to.parent()));
                 },
 
-                onWhell: function (e, delta) { //for horizontal scroll
+                onWhell: function (e, delta) {
                     var t, l, cp, E = e.originalEvent, et;
 
-                    S.to = $((this === E.target) ? this : E.target);
+                    S.to = $((this === e.target) ? this : e.target);
                     delta = (delta || E.wheelDelta || E.wheelDeltaY || E.wheelDeltaX) >> 1;
 
                     do {
@@ -70,29 +77,31 @@ $(function () {
                     return this;
                 },
                 onHold: function (e) {
+                	
                     var et = (e.target.tagName || e.target.localName || e.target.nodeName).toLowerCase();
-                    if (et in { 'input': '', 'textarea': '', 'select': '', 'object':'' }) return;
-
+                    if (et in S.DragOn.opt.exclusion) return;
+                  
                     (e.type == 'mousedown') && (e.preventDefault(), e.stopPropagation());
 
                     S.startPos = S.holdPos = { 'x': e.pageX, 'y': e.pageY };
-                    S.bind('mousemove', S.DragOn.onDragg).bind('mouseleave mouseup', S.DragOn.onRelease);
-                    (S.too = S.to = $((this === e.target) ? this : e.target)).bind('mouseup', S.DragOn.onRelease);
+                    S.on({'mousemove':S.DragOn.onDragg,'mouseleave mouseup':S.DragOn.onRelease});
+                    (S.too = S.to = $((this === e.target) ? this : e.target)).on('mouseup', S.DragOn.onRelease);
+
                     S.DragOn.noButtonHold = false;
-                    (S.DragOn.SAH=S.too).bind('scroll', S.DragOn.onScrollAfterHold);
+                    (S.DragOn.SAH = S.too).on('scroll', S.DragOn.onScrollAfterHold);
                 },
                 onScrollAfterHold: function (e) {
                     S.DragOn.noButtonHold = true;
-                    S.DragOn.SAH.unbind('scroll', S.DragOn.onScrollAfterHold);
+                    S.DragOn.SAH.off('scroll', S.DragOn.onScrollAfterHold);
                 },
                 onDragg: function (e) {
-                    S.DragOn.SAH && (S.DragOn.SAH.unbind('scroll', S.DragOn.onScrollAfterHold),S.DragOn.SAH=null);
+
+                    S.DragOn.SAH && (S.DragOn.SAH.off('scroll', S.DragOn.onScrollAfterHold), S.DragOn.SAH = null);
                     var x = e.pageX, y = e.pageY,
 					dx = x - S.holdPos.x; dy = y - S.holdPos.y;
                     S.to = $((this === e.target) ? this : e.target);
-
-                    if (S.DragOn.noButtonHold || e.buttons === 0 || !(e.which + e.button) && (e.buttons != 'undefined')) return S.DragOn.onRelease(e); 	                            //default scroll bar mouseup patch					
-
+                    
+                    if (S.DragOn.noButtonHold || !(e.which + e.button)) return S.DragOn.onRelease(e);
                     e.preventDefault(); e.stopPropagation();
 
                     S.holdPos = { 'x': x, 'y': y };
@@ -101,15 +110,15 @@ $(function () {
                 },
                 onRelease: function (e) {
                     if (e.type in { 'mouseup': '', 'mouseleave': '' }) (e.preventDefault(), e.stopPropagation(), e.stopImmediatePropagation());
-                    S.DragOn.SAH && (S.DragOn.SAH.unbind('scroll', S.DragOn.onScrollAfterHold),S.DragOn.SAH=null);
-                    S.unbind('mouseleave mouseup', S.DragOn.onRelease).unbind('mousemove', S.DragOn.onDragg);
-                    S.too.unbind('mouseup', S.DragOn.onRelease);
+                    S.DragOn.SAH && (S.DragOn.SAH.off('scroll', S.DragOn.onScrollAfterHold), S.DragOn.SAH = null);
+                    S.off({'mouseleave mouseup':S.DragOn.onRelease,'mousemove':S.DragOn.onDragg});
+                    S.too && S.too.off('mouseup', S.DragOn.onRelease);
                     return true;
                 }
             };
 
-            S.css({ cursor: 'all-scroll' }).children('a').mousedown(onPrevent).css({ cursor: 'pointer' });
-            S.bind('mousewheel', S.DragOn.onWhell).bind('mousedown', S.DragOn.onHold);
+            S.css({ cursor: S.DragOn.opt.cursor }).children('a').mousedown(onPrevent).css({ cursor: 'pointer' });
+            S.on({'mousewheel':S.DragOn.onWhell,'mousedown':S.DragOn.onHold});
 
             (Info || console).log('DragOn fly...');
         }

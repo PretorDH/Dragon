@@ -80,7 +80,14 @@ In this case, you can assign multiple nested root blocks.</p>
 
     <script> 
       $( function(){ 
-        $( [selector] ).dragOn();
+        $( [selector] ).dragOn([options]);
       }); 
     </script>
 
+<h3>Options</h3>
+<p>Options is [:object:{['name':'value'],...}] replace default values of DragOn.</p>
+<p><b>cursor</b> &mdash; [:text - <i>def</i>: 'all-scroll'] You can setup mouse cursor over scrolable content.</p>
+<p><b>exclusion</b> &mdash; [ :object:{['tagName':''],...} - <i>def</i>: {'input':'', 'textarea':'', 'select':'', 'object':''}] 
+This is the object in which the field 
+names are the names of the tags. These tags will be excluded from processing.
+Anchor tag &lt;A&gt; is processed separately.</p>

@@ -62,16 +62,14 @@ Dragon - smart scrolling jQuery plugin for correct scrolling mechanics
       <script src="[path]/drag-on.js"></script> 
       ...
     </head>
-    <body>
-      <div class='dragon'> 
+    <body class='dragon'>
         [content] 
-      </div>
     </body>
 
 
-<p>Add a class "dragon" only to the root block with the content. Do not 
-add the class to &lt;body&gt;. All block elements with active scrolling 
-inside root element with a class "dragon", will be connected.
+<p>Add a class "dragon" to the &lt;body&gt; block or any other blocks. 
+All block elements with active scrolling inside root element with a class "dragon", 
+will be connected.
 </p>
 <p>Be careful.<br/>Event capturing mousedown, between the root and the block 
 with scrolling, probably forbid smart scrolling. 

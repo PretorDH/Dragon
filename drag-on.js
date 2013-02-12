@@ -1,5 +1,5 @@
 ﻿/**
- * jQuery.Drag-On v2.2.4
+ * jQuery.Drag-On v2.2.5
  * @author Dark Heart aka PretorDH
  * @site dragon.deparadox.com
  * MIT license
@@ -14,7 +14,7 @@ $(function () {
     });
 
     $.extend({
-        DragOn: function (S, opt) { /* Механика прокрутки */
+         DragOn: function (S, opt) { /* Scroll mechanics */
             
             var def = {
             	exclusion : {'input': '', 'textarea': '', 'select': '', 'object':''},
@@ -46,10 +46,10 @@ $(function () {
                         cp = S.DragOn.getCurPos();
                         (cp.maxY > 0) && (Math.abs(dy) > Math.abs(dx))
 							&& ((cp.maxX > 0) || (dx = 0), ddy = (cp.t - (ddy = Math.round((cp.maxY / cp.ph + 1) * dy)) < 0) ? cp.t : (cp.t - ddy > cp.maxY ? cp.t - cp.maxY : ddy))
-							&& S.to.scrollTop(cp.t - ddy), (t = S.to.scrollTop() != cp.t) && (dy = 0);
+							&& S.to.scrollTop(cp.t - ddy), (t = S.to.scrollTop() != cp.t) && (dy = 0,S.to.scroll());
                         (cp.maxX > 0) && (Math.abs(dx) > Math.abs(dy))
 							&& (dy = 0, ddx = (cp.l - (ddx = Math.round((cp.maxX / cp.pw + 1) * dx)) < 0) ? cp.l : (cp.l - ddx > cp.maxX ? cp.l - cp.maxX : ddx))
-							&& S.to.scrollLeft(cp.l - ddx), (l = S.to.scrollLeft() != cp.l) && (dx = 0);
+							&& S.to.scrollLeft(cp.l - ddx), (l = S.to.scrollLeft() != cp.l) && (dx = 0,S.to.scroll());
                     } while ((S.to.css('overflow') == 'no-dragon'
 								|| S.to[0].tagName.toLowerCase() == 'a'
 								|| !(dy && t) && !(dx && l))
@@ -57,7 +57,7 @@ $(function () {
 							&& (S.to = S.to.parent()));
                 },
 
-                onWhell: function (e, delta) {
+                onWhell: function (e, delta) { //for horizontal scroll
                     var t, l, cp, E = e.originalEvent, et;
 
                     S.to = $((this === e.target) ? this : e.target);
@@ -69,8 +69,8 @@ $(function () {
                     } while (
 					!((Math.abs((S.offset().top - S.to.offset().top) << 1 + S.innerHeight() - cp.ph) <= Math.abs(delta) << 1
 					|| ((t = S.to.offset().top - S.offset().top) >= 0 && t <= S.innerHeight() - cp.ph))
-						&& ((((cp.maxX > 0) && (S.to.scrollLeft(t = (t = cp.l - delta) > 0 ? (t > cp.maxX ? cp.maxX : t) : 0), S.to.scrollLeft()) != cp.l) && (e.preventDefault(), e.stopPropagation(), 1))
-						|| (((cp.maxY > 0) && (S.to.scrollTop(t = (t = cp.t - delta) > 0 ? (t > cp.maxY ? cp.maxY : t) : 0), S.to.scrollTop()) != cp.t) && (e.preventDefault(), e.stopPropagation(), 1))))
+						&& ((((cp.maxX > 0) && (S.to.scrollLeft(t = (t = cp.l - delta) > 0 ? (t > cp.maxX ? cp.maxX : t) : 0), S.to.scrollLeft()) != cp.l) && (e.preventDefault(), e.stopPropagation(),S.to.scroll(),1))
+						|| (((cp.maxY > 0) && (S.to.scrollTop(t = (t = cp.t - delta) > 0 ? (t > cp.maxY ? cp.maxY : t) : 0), S.to.scrollTop()) != cp.t) && (e.preventDefault(), e.stopPropagation(),S.to.scroll(),1))))
 					&& S[0] != S.to[0]
 					&& (S.to = S.to.parent()));
 
@@ -121,6 +121,7 @@ $(function () {
             S.on({'mousewheel':S.DragOn.onWhell,'mousedown':S.DragOn.onHold});
 
             (Info || console).log('DragOn fly...');
+            return S;
         }
     });
 

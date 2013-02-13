@@ -1,5 +1,5 @@
 ﻿/**
- * jQuery.Drag-On v2.2.5
+ * jQuery.Drag-On v2.2.6
  * @author Dark Heart aka PretorDH
  * @site dragon.deparadox.com
  * MIT license
@@ -62,6 +62,7 @@ $(function () {
 
                     S.to = $((this === e.target) ? this : e.target);
                     delta = (delta || E.wheelDelta || E.wheelDeltaY || E.wheelDeltaX) >> 1;
+                    delta = delta || (-(E.deltaX || E.deltaY || E.deltaZ)<<(E.deltaMode && E.deltaMode<<2)<<1);
 
                     do {
                         while ((S.to[0].nodeType != 1 || S.to.css('overflow') in { 'visible': '', 'no-dragon': '' }) && S[0] != S.to[0]) S.to = S.to.parent();
@@ -118,7 +119,7 @@ $(function () {
             };
 
             S.css({ cursor: S.DragOn.opt.cursor }).children('a').mousedown(onPrevent).css({ cursor: 'pointer' });
-            S.on({'mousewheel':S.DragOn.onWhell,'mousedown':S.DragOn.onHold});
+            S.on({'mousewheel wheel':S.DragOn.onWhell,'mousedown':S.DragOn.onHold});
 
             (Info || console).log('DragOn fly...');
             return S;

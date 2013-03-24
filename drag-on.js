@@ -1,5 +1,5 @@
 ﻿/**
- * jQuery.Drag-On v2.2.6
+ * jQuery.Drag-On v2.3
  * @author Dark Heart aka PretorDH
  * @site dragon.deparadox.com
  * MIT license
@@ -18,7 +18,8 @@ $(function () {
             
             var def = {
             	exclusion : {'input': '', 'textarea': '', 'select': '', 'object':''},
-            	cursor : 'all-scroll'
+            	cursor : 'all-scroll',
+            	easing : 'true'
             }
             
             function onPrevent(E) {
@@ -77,14 +78,19 @@ $(function () {
 
                     return this;
                 },
-                onHold: function (e) {
-                	
+                onHold: function (e) {           
                     var et = (e.target.tagName || e.target.localName || e.target.nodeName).toLowerCase();
                     if (et in S.DragOn.opt.exclusion) return;
+                    if (S.DragOn.ORE) {
+                    	clearTimeout(S.moment.ORE);
+                    	S.moment.ORE=null;
+                    };
                   
                     (e.type == 'mousedown') && (e.preventDefault(), e.stopPropagation());
-
-                    S.startPos = S.holdPos = { 'x': e.pageX, 'y': e.pageY };
+                    
+                    S.moment = S.holdPos = { 'x': e.pageX, 'y': e.pageY };
+                    S.moment.startTime=(b=new Date()).getTime();
+                    
                     S.on({'mousemove':S.DragOn.onDragg,'mouseleave mouseup':S.DragOn.onRelease});
                     (S.too = S.to = $((this === e.target) ? this : e.target)).on('mouseup', S.DragOn.onRelease);
 
@@ -110,11 +116,26 @@ $(function () {
                     return true;
                 },
                 onRelease: function (e) {
+                	var B;
+                	S.DragOn.opt.easing && 
+                		(S.moment.vector={y:e.pageY-S.moment.y,x:e.pageX-S.moment.x},
+                		 S.moment.snatch=((b=new Date()).getTime()-S.moment.startTime),
+                		 S.moment.speedX=((S.moment.vector.x>0)?1:-1)*S.moment.vector.x*S.moment.vector.x/(2*S.moment.snatch),
+                		 S.moment.speedY=((S.moment.vector.y>0)?1:-1)*S.moment.vector.y*S.moment.vector.y/(2*S.moment.snatch),
+                		 (S.moment.snatch<350)&&(S.moment.ORE=setTimeout(S.DragOn.onReleaseEasing,10)));
+                
                     if (e.type in { 'mouseup': '', 'mouseleave': '' }) (e.preventDefault(), e.stopPropagation(), e.stopImmediatePropagation());
                     S.DragOn.SAH && (S.DragOn.SAH.off('scroll', S.DragOn.onScrollAfterHold), S.DragOn.SAH = null);
                     S.off({'mouseleave mouseup':S.DragOn.onRelease,'mousemove':S.DragOn.onDragg});
                     S.too && S.too.off('mouseup', S.DragOn.onRelease);
                     return true;
+                },
+                onReleaseEasing: function (e) {
+                	var dx,dy,x;
+                    S.holdPos = { 'x': S.holdPos.x+(dx=S.moment.speedX*=0.95), 'y': S.holdPos.y+(dy=S.moment.speedY*=0.95) };
+                    S.to=S.too;
+                    S.DragOn.setCurPos(dx, dy);
+                    S.moment.ORE=(Math.abs(dy)+Math.abs(dx)>1)?setTimeout(S.DragOn.onReleaseEasing,10):null;
                 }
             };
 

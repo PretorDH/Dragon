@@ -90,3 +90,4 @@ In this case, you can assign multiple nested root blocks.</p>
 This is the object in which the field 
 names are the names of the tags. These tags will be excluded from processing.
 Anchor tag &lt;A&gt; is processed separately.</p>
+<p><b>easing</b> &mdash; [:boolean - <i>def</i>: true] Easing of acceleration after end dragging.</p>

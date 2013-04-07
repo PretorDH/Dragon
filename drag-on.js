@@ -1,5 +1,5 @@
 ﻿/**
- * jQuery.Drag-On v2.3
+ * jQuery.Drag-On v2.3.1
  * @author Dark Heart aka PretorDH
  * @site dragon.deparadox.com
  * MIT license
@@ -14,18 +14,18 @@ $(function () {
     });
 
     $.extend({
-         DragOn: function (S, opt) { /* Scroll mechanics */
+        DragOn: function (S, opt) { /* Scroll mechanics */
             
             var def = {
-            	exclusion : {'input': '', 'textarea': '', 'select': '', 'object':''},
+            	exclusion : {'input': '', 'textarea': '', 'select': '', 'object':'' , 'iframe':'' , 'id':'#gmap,#map-canvas'},
             	cursor : 'all-scroll',
             	easing : 'true'
             }
             
             function onPrevent(E) {
-                var e = E || event, et = (e.target && (e.target.tagName || e.target.localName || e.target.nodeName).toLowerCase());
-                return et && (et in S.opt.exclusion  || ($(e.target).attr('href') || $(e.target).parents().attr('href') && (e.stopPropagation && e.stopPropagation(), true)))
-				   || (e.preventDefault && e.preventDefault(), e.stopPropagation && e.stopPropagation(), false);
+                var e = E || event, et = (e && e.target && (e.target.tagName || e.target.localName || e.target.nodeName).toLowerCase());
+                return e && et && (et in S.DragOn.opt.exclusion || ($(e.target).attr('href') || $(e.target).parents().attr('href') && (e.stopPropagation && e.stopPropagation(), true)))
+				   || (e && e.preventDefault && e.preventDefault(), e.stopPropagation && e.stopPropagation(), false);
             };
 
             (S = $(S)).DragOn = {
@@ -47,10 +47,10 @@ $(function () {
                         cp = S.DragOn.getCurPos();
                         (cp.maxY > 0) && (Math.abs(dy) > Math.abs(dx))
 							&& ((cp.maxX > 0) || (dx = 0), ddy = (cp.t - (ddy = Math.round((cp.maxY / cp.ph + 1) * dy)) < 0) ? cp.t : (cp.t - ddy > cp.maxY ? cp.t - cp.maxY : ddy))
-							&& S.to.scrollTop(cp.t - ddy), (t = S.to.scrollTop() != cp.t) && (dy = 0,S.to.scroll());
+							&& S.to.scrollTop(cp.t - ddy), (t = S.to.scrollTop() != cp.t) && (dy = 0,S.to.trigger('scroll',[false,true]));
                         (cp.maxX > 0) && (Math.abs(dx) > Math.abs(dy))
 							&& (dy = 0, ddx = (cp.l - (ddx = Math.round((cp.maxX / cp.pw + 1) * dx)) < 0) ? cp.l : (cp.l - ddx > cp.maxX ? cp.l - cp.maxX : ddx))
-							&& S.to.scrollLeft(cp.l - ddx), (l = S.to.scrollLeft() != cp.l) && (dx = 0,S.to.scroll());
+							&& S.to.scrollLeft(cp.l - ddx), (l = S.to.scrollLeft() != cp.l) && (dx = 0,S.to.trigger('scroll',[true,false]));
                     } while ((S.to.css('overflow') == 'no-dragon'
 								|| S.to[0].tagName.toLowerCase() == 'a'
 								|| !(dy && t) && !(dx && l))
@@ -59,10 +59,10 @@ $(function () {
                 },
 
                 onWhell: function (e, delta) { //for horizontal scroll
-                    var t, l, cp, E = e.originalEvent, et;
+                    var t, l, cp, E = e.originalEvent, et;                    
 
                     S.to = $((this === e.target) ? this : e.target);
-                    delta = (delta || E.wheelDelta || E.wheelDeltaY || E.wheelDeltaX) >> 1;
+                    delta = (delta || E.wheelDelta || E.wheelDeltaY || E.wheelDeltaX ) >> 1;
                     delta = delta || (-(E.deltaX || E.deltaY || E.deltaZ)<<(E.deltaMode && E.deltaMode<<2)<<1);
 
                     do {
@@ -71,33 +71,36 @@ $(function () {
                     } while (
 					!((Math.abs((S.offset().top - S.to.offset().top) << 1 + S.innerHeight() - cp.ph) <= Math.abs(delta) << 1
 					|| ((t = S.to.offset().top - S.offset().top) >= 0 && t <= S.innerHeight() - cp.ph))
-						&& ((((cp.maxX > 0) && (S.to.scrollLeft(t = (t = cp.l - delta) > 0 ? (t > cp.maxX ? cp.maxX : t) : 0), S.to.scrollLeft()) != cp.l) && (e.preventDefault(), e.stopPropagation(),S.to.scroll(),1))
-						|| (((cp.maxY > 0) && (S.to.scrollTop(t = (t = cp.t - delta) > 0 ? (t > cp.maxY ? cp.maxY : t) : 0), S.to.scrollTop()) != cp.t) && (e.preventDefault(), e.stopPropagation(),S.to.scroll(),1))))
+						&& ((((cp.maxX > 0) && (S.to.scrollLeft(t = (t = cp.l - delta) > 0 ? (t > cp.maxX ? cp.maxX : t) : 0), S.to.scrollLeft()) != cp.l) && (e.preventDefault(), e.stopPropagation(),S.to.trigger('scroll',[true,false]),1))
+						|| (((cp.maxY > 0) && (S.to.scrollTop(t = (t = cp.t - delta) > 0 ? (t > cp.maxY ? cp.maxY : t) : 0), S.to.scrollTop()) != cp.t) && (e.preventDefault(), e.stopPropagation(),S.to.trigger('scroll',[false,true]),1))))
 					&& S[0] != S.to[0]
 					&& (S.to = S.to.parent()));
 
                     return this;
                 },
                 onHold: function (e) {           
-                    var et = (e.target.tagName || e.target.localName || e.target.nodeName).toLowerCase();
+                    var b,et = (e.target.tagName || e.target.localName || e.target.nodeName).toLowerCase();
                     if (et in S.DragOn.opt.exclusion) return;
                     if (S.DragOn.ORE) {
                     	clearTimeout(S.moment.ORE);
                     	S.moment.ORE=null;
                     };
                   
+                    S.too = S.to = $((this === e.target) ? this : e.target);
+                    if (S.too.parents(S.DragOn.opt.exclusion.id).length) return;
+                    
                     (e.type == 'mousedown') && (e.preventDefault(), e.stopPropagation());
-                    
-                    S.moment = S.holdPos = { 'x': e.pageX, 'y': e.pageY };
-                    S.moment.startTime=(b=new Date()).getTime();
-                    
+					
+					S.moment = S.holdPos = { 'x': e.pageX, 'y': e.pageY };
+					S.moment.startTime=(b=new Date()).getTime(),
                     S.on({'mousemove':S.DragOn.onDragg,'mouseleave mouseup':S.DragOn.onRelease});
-                    (S.too = S.to = $((this === e.target) ? this : e.target)).on('mouseup', S.DragOn.onRelease);
+                    S.too.on('mouseup', S.DragOn.onRelease);
 
                     S.DragOn.noButtonHold = false;
                     (S.DragOn.SAH = S.too).on('scroll', S.DragOn.onScrollAfterHold);
                 },
                 onScrollAfterHold: function (e) {
+                	S.moment = null;
                     S.DragOn.noButtonHold = true;
                     S.DragOn.SAH.off('scroll', S.DragOn.onScrollAfterHold);
                 },
@@ -117,7 +120,7 @@ $(function () {
                 },
                 onRelease: function (e) {
                 	var B;
-                	S.DragOn.opt.easing && 
+                	S.DragOn.opt.easing && S.moment &&
                 		(S.moment.vector={y:e.pageY-S.moment.y,x:e.pageX-S.moment.x},
                 		 S.moment.snatch=((b=new Date()).getTime()-S.moment.startTime),
                 		 S.moment.speedX=((S.moment.vector.x>0)?1:-1)*S.moment.vector.x*S.moment.vector.x/(2*S.moment.snatch),
@@ -136,6 +139,16 @@ $(function () {
                     S.to=S.too;
                     S.DragOn.setCurPos(dx, dy);
                     S.moment.ORE=(Math.abs(dy)+Math.abs(dx)>1)?setTimeout(S.DragOn.onReleaseEasing,10):null;
+                },               
+                onTouch: function (e) {
+                    S.to = $((this === e.target) ? this : e.target);
+                    var c=(e.type=='touchstart')?e.originalEvent.touches[0]:e;
+                    S.holdPos = {'x':e.pageX, 'y':e.pageY};
+                    do {
+                    	
+                    } while ((S.to.css('overflow') == 'no-dragon' || S.to[0].tagName.toLowerCase() == 'a')
+							&& S[0] != S.to[0]
+							&& (S.to = S.to.parent()));
                 }
             };
 

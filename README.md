@@ -140,3 +140,34 @@ Anchor tag &lt;A&gt; is processed separately.</p>
 <p>Include the <b>bar-on.js</b> in header and all block with class "dragon" will be with unique scrollbars. 
 Scrollbars will show for all block elements with active scrolling inside root element with a class "dragon". 
 All content who inserted later into any child block will be connected too.</p>
+
+<h3>Style example...</h3>
+<pre>
+.rBarOn,.bBarOn {
+	display: block;
+	z-index: 3;		
+	background-color: red;
+	border-radius:2px;
+	opacity:.75;
+}
+.rBarOn {
+	width: 4px;
+	border-left: 2px white solid;
+	margin-right:2px;
+}
+.bBarOn {
+	height: 4px;
+	border-top: 2px white solid;
+	margin-bottom:2px;
+}
+.rBarOn:hover {
+	width: 12px;
+	border-left: 2px white solid;
+	border-radius:6px;
+}
+.bBarOn:hover {
+	height: 12px;
+	border-top: 2px white solid;
+	border-radius:6px;
+}
+</pre>

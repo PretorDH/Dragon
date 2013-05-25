@@ -1,5 +1,5 @@
 ﻿/**
- * jQuery.Drag-On v2.4.1
+ * jQuery.Drag-On v2.4.2
  * @author Dark Heart aka PretorDH
  * @site dragon.deparadox.com
  * MIT license
@@ -73,8 +73,8 @@ $(function () {
                         while ((S.to[0].nodeType != 1 || S.to.css('overflow') in { 'visible': '', 'no-dragon': '' }) && S[0] != S.to[0]) S.to = S.to.parent();
                         cp = Sd.getCurPos();
                     } while (
-					!((Math.abs((S.offset().top - S.to.offset().top) << 1 + S.innerHeight() - cp.ph) <= Math.abs(delta+delta>>1)
-					|| ((t = S.to.offset().top - S.offset().top) >= 0 && t <= S.innerHeight() - cp.ph))
+					!((Math.abs((S.to.offsetParent().top - S.to.offset().top) << 1 + S.to.offsetParent().innerHeight() - cp.ph) <= Math.abs(delta+delta>>1)
+					|| ((t = S.to.offset().top - S.to.offsetParent().offset().top) >= 0 && t <= S.to.offsetParent().innerHeight() - cp.ph))
 						&& ((((cp.maxX > 0) && (S.to.scrollLeft(t = (t = cp.l - delta) > 0 ? (t > cp.maxX ? cp.maxX : t) : 0), S.to.scrollLeft()) != cp.l) && (e.preventDefault(), e.stopPropagation(),S.to.trigger('scroll',[true,true]),1))
 						|| (((cp.maxY > 0) && (S.to.scrollTop(t = (t = cp.t - delta) > 0 ? (t > cp.maxY ? cp.maxY : t) : 0), S.to.scrollTop()) != cp.t) && (e.preventDefault(), e.stopPropagation(),S.to.trigger('scroll',[false,false]),1))))
 					&& S[0] != S.to[0]

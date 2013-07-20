@@ -1,5 +1,5 @@
 ﻿/**
- * jQuery.Drag-On v2.4.2
+ * jQuery.Drag-On v2.4.3
  * @author Dark Heart aka PretorDH
  * @site dragon.deparadox.com
  * MIT license
@@ -15,6 +15,7 @@ $(function () {
 
     $.extend({
         DragOn: function (S, opt) { /* Scroll mechanics */
+            
             
             var def = {
             	exclusion : {'input': '', 'textarea': '', 'select': '', 'object':'' , 'iframe':'' , 'id':'#gmap,#map-canvas'},
@@ -54,7 +55,7 @@ $(function () {
                         (cp.maxX > 0) && (Math.abs(dx) > Math.abs(dy))
 							&& (dy = 0, ddx = (cp.l - (ddx = Math.round((cp.maxX / cp.pw + 1) * dx)) < 0) ? cp.l : (cp.l - ddx > cp.maxX ? cp.l - cp.maxX : ddx))
 							&& S.to.scrollLeft(cp.l - ddx), (l = S.to.scrollLeft() != cp.l) && (dx = 0,S.to.trigger('scroll'));
-                    } while ((S.to.css('overflow') == 'no-dragon'
+                    } while ((S.to.data('overflow') == 'no-dragon'
 								|| S.to[0].tagName.toLowerCase() == 'a'
 								|| !(dy && t) && !(dx && l))
 							&& S[0] != S.to[0]
@@ -70,10 +71,13 @@ $(function () {
                     delta = delta || (-(E.deltaX || E.deltaY || E.deltaZ)<<(E.deltaMode && E.deltaMode<<2)<<1);
 
                     do {
-                        while ((S.to[0].nodeType != 1 || S.to.css('overflow') in { 'visible': '', 'no-dragon': '' }) && S[0] != S.to[0]) S.to = S.to.parent();
+                        while ((S.to[0].nodeType != 1 || S.to.css('overflow')=='visible') && S[0] != S.to[0]) {
+                        	if (S.to.data('overflow')=='no-dragon') return;
+                        	S.to = S.to.parent();
+                        }
                         cp = Sd.getCurPos();
                     } while (
-					!((Math.abs((S.to.offsetParent().top - S.to.offset().top) << 1 + S.to.offsetParent().innerHeight() - cp.ph) <= Math.abs(delta+delta>>1)
+					!((Math.abs((S.to.offsetParent().offset().top - S.to.offset().top) << 1 + S.to.offsetParent().innerHeight() - cp.ph) <= Math.abs(delta+delta>>1)
 					|| ((t = S.to.offset().top - S.to.offsetParent().offset().top) >= 0 && t <= S.to.offsetParent().innerHeight() - cp.ph))
 						&& ((((cp.maxX > 0) && (S.to.scrollLeft(t = (t = cp.l - delta) > 0 ? (t > cp.maxX ? cp.maxX : t) : 0), S.to.scrollLeft()) != cp.l) && (e.preventDefault(), e.stopPropagation(),S.to.trigger('scroll',[true,true]),1))
 						|| (((cp.maxY > 0) && (S.to.scrollTop(t = (t = cp.t - delta) > 0 ? (t > cp.maxY ? cp.maxY : t) : 0), S.to.scrollTop()) != cp.t) && (e.preventDefault(), e.stopPropagation(),S.to.trigger('scroll',[false,false]),1))))
@@ -176,14 +180,15 @@ $(function () {
                     S.holdPos = {'x':e.pageX, 'y':e.pageY};
                     do {
                     	
-                    } while ((S.to.css('overflow') == 'no-dragon' || S.to[0].tagName.toLowerCase() == 'a')
+                    } while ((S.to.data('overflow') == 'no-dragon' || S.to[0].tagName.toLowerCase() == 'a')
 							&& S[0] != S.to[0]
 							&& (S.to = S.to.parent()));
                 }
             };
 			
             S.css({ cursor: Sd.opt.cursor }).children('a').mousedown(onPrevent).css({ cursor: 'pointer' });
-            S.on({'mousewheel wheel':Sd.onWhell,'mousedown':Sd.onHold,'keyup':Sd.onKeyDown,'keydown':Sd.onKeyDown});
+            S.on({'mousewheel wheel':Sd.onWhell,'mousedown':Sd.onHold,'keyup':Sd.onKeyDown});
+            $('body').on({'keydown':Sd.onKeyDown});
 
             (("Info" in window) && Info||console).log('DragOn fly...');
             return S;

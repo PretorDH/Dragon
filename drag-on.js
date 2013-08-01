@@ -1,5 +1,5 @@
 ﻿/**
- * jQuery.Drag-On v2.4.3
+ * jQuery.Drag-On v2.5.1
  * @author Dark Heart aka PretorDH
  * @site dragon.deparadox.com
  * MIT license
@@ -15,7 +15,6 @@ $(function () {
 
     $.extend({
         DragOn: function (S, opt) { /* Scroll mechanics */
-            
             
             var def = {
             	exclusion : {'input': '', 'textarea': '', 'select': '', 'object':'' , 'iframe':'' , 'id':'#gmap,#map-canvas'},
@@ -61,29 +60,43 @@ $(function () {
 							&& S[0] != S.to[0]
 							&& (S.to = S.to.parent()));
                 },
+                scrollParent : function(Sto) {
+					while ((Sto[0].nodeType != 1 || Sto.css('overflow')=='visible') || Sto.data('overflow')=='no-dragon' && S[0]!=Sto[0] ) Sto=Sto.parent();
+					return Sto;
+                },
 
                 onWhell: function (e, delta) { //for horizontal scroll
                     Sd.moment={};
-                    var t, l, cp, E = e.originalEvent, et;     
+                    var SSto,cp,st,ot,t,l,ph,pw,et,ad
+                    	E = e.originalEvent;     
 					Sd.x = 1; Sd.y = 1;
                     S.to = $((this === e.target) ? this : e.target);
+
                     delta = (delta || E.wheelDelta || E.wheelDeltaY || E.wheelDeltaX ) >> 1;
                     delta = delta || (-(E.deltaX || E.deltaY || E.deltaZ)<<(E.deltaMode && E.deltaMode<<2)<<1);
+                    ad=Math.abs(delta>>1);
 
                     do {
-                        while ((S.to[0].nodeType != 1 || S.to.css('overflow')=='visible') && S[0] != S.to[0]) {
-                        	if (S.to.data('overflow')=='no-dragon') return;
-                        	S.to = S.to.parent();
-                        }
-                        cp = Sd.getCurPos();
-                    } while (
-					!((Math.abs((S.to.offsetParent().offset().top - S.to.offset().top) << 1 + S.to.offsetParent().innerHeight() - cp.ph) <= Math.abs(delta+delta>>1)
-					|| ((t = S.to.offset().top - S.to.offsetParent().offset().top) >= 0 && t <= S.to.offsetParent().innerHeight() - cp.ph))
-						&& ((((cp.maxX > 0) && (S.to.scrollLeft(t = (t = cp.l - delta) > 0 ? (t > cp.maxX ? cp.maxX : t) : 0), S.to.scrollLeft()) != cp.l) && (e.preventDefault(), e.stopPropagation(),S.to.trigger('scroll',[true,true]),1))
-						|| (((cp.maxY > 0) && (S.to.scrollTop(t = (t = cp.t - delta) > 0 ? (t > cp.maxY ? cp.maxY : t) : 0), S.to.scrollTop()) != cp.t) && (e.preventDefault(), e.stopPropagation(),S.to.trigger('scroll',[false,false]),1))))
-					&& S[0] != S.to[0]
-					&& (S.to = S.to.parent()));
+	                    S.to = Sd.scrollParent(S.to);
+                        S.too=(SSto = S.to[0]!=S[0])?Sd.scrollParent(S.to.parent()):S;
 
+                        cp = Sd.getCurPos();                        
+                		st=S.to.offset();				ot=S.too.offset();
+                		t=st.top-ot.top;				l=st.left-ot.left;
+                		ph=S.too.innerHeight()-cp.ph;	pw=S.too.innerWidth()-cp.pw;
+                    		
+                    	if  ( (ph>=0 && -ad<=t && t<=ph+ad || ph<=0 && ad>=t && t>=ph-ad) && (pw>=0 && -ad<=l && l<=pw+ad || pw<=0 && ad>=l && l>=pw-ad) ){
+	                        if (cp.maxY > 0) {
+                        		S.to.scrollTop(t = (t = cp.t - delta) > 0 ? (t > cp.maxY ? cp.maxY : t) : 0);
+                        		if ( S.to.scrollTop()!=cp.t ) (e.preventDefault(),e.stopPropagation(),S.to.trigger('scroll',[false,false]),delta=0);
+                        	};
+	                        if (delta && cp.maxX > 0) {
+                        		S.to.scrollLeft(t = (t = cp.l - delta) > 0 ? (t > cp.maxX ? cp.maxX : t) : 0);
+                        		if ( S.to.scrollLeft()!=cp.l ) (e.preventDefault(),e.stopPropagation(),S.to.trigger('scroll',[true,true]),delta=0);
+                        	};
+                        };
+                        
+                    } while (delta!=0 && SSto && (S.to=S.to.parent()) );
                     return this;
                 },
                 onHold: function (e) {        
@@ -171,18 +184,6 @@ $(function () {
                 	             	               	
 					Sd.onReleaseEasing();
 					e.preventDefault(); e.stopPropagation();
-                },  
-                
-         
-                onTouch: function (e) {
-                    S.to = $((this === e.target) ? this : e.target);
-                    var c=(e.type=='touchstart')?e.originalEvent.touches[0]:e;
-                    S.holdPos = {'x':e.pageX, 'y':e.pageY};
-                    do {
-                    	
-                    } while ((S.to.data('overflow') == 'no-dragon' || S.to[0].tagName.toLowerCase() == 'a')
-							&& S[0] != S.to[0]
-							&& (S.to = S.to.parent()));
                 }
             };
 			
@@ -192,6 +193,7 @@ $(function () {
 
             (("Info" in window) && Info||console).log('DragOn fly...');
             return S;
+
         }
     });
 

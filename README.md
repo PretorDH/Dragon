@@ -119,6 +119,13 @@ names are the names of the tags. These tags will be excluded from processing.
 Anchor tag &lt;A&gt; is processed separately.</p>
 <p><b>easing</b> &mdash; [:boolean - <i>def</i>: true] Easing of acceleration after end dragging.</p>
 
+<h3>Triggers</h3>
+<p> 'DragOn.toggle' - enable/disable functionality of DragOn (include plug-ins). </p> 
+<p> 'DragOn.remove' - destroy DragOn object. </p> 
+Use:
+<pre>
+	$( [selector] ).trigger('DragOn.toggle');
+</pre>
 
 <h1>BarOn - Let´s show...<h1>
 
@@ -140,6 +147,16 @@ Anchor tag &lt;A&gt; is processed separately.</p>
 <p>Include the <b>bar-on.js</b> in header and all block with class "dragon" will be with unique scrollbars. 
 Scrollbars will show for all block elements with active scrolling inside root element with a class "dragon". 
 All content who inserted later into any child block will be connected too.</p>
+
+<h3>Triggers</h3>
+<p> 'BarOn.toggle' - enable/disable functionality of BarOn. </p> 
+<p> 'BarOn.remove' - destroy BarOn object. </p> 
+
+Use:
+<pre>
+	$( [selector] ).trigger('BarOn.toggle');
+</pre>
+
 
 <h3>Style example...</h3>
 <pre>

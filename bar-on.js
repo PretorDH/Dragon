@@ -1,5 +1,5 @@
 ﻿/**
- * jQuery.Bar-On v0.4.1
+ * jQuery.Bar-On v0.4.2
  * @author Dark Heart aka PretorDH
  * @site dragon.deparadox.com/#baron
  * MIT license
@@ -20,6 +20,22 @@ $.extend({
         	var rB,bB,
             Bo=(S.to = (S = $(S))).BarOn = {
             	doList : {'auto':'','scroll':''},
+            	on:true,
+            	toggle: function() {
+            		if (Bo.on) {
+			            (rB=$('.rBarOn',S)).length || (rB=S.append('<div class="rBarOn" style="position:absolute"></div>').children('.rBarOn'));
+			            (bB=$('.bBarOn',S)).length || (bB=S.append('<div class="bBarOn" style="position:absolute"></div>').children('.bBarOn'));           
+			            Bo.onDoModification(Bo.clearScroll);
+			            S.on({'scroll':Bo.onScroll,'mousemove':Bo.onHover});
+			            $(window).on('resize',Bo.drawScroll);
+			        } else {
+			            $('.rBarOn,.bBarOn',S).remove();
+			            S.off({'scroll':Bo.onScroll,'mousemove':Bo.onHover});
+			            $(window).off('resize',Bo.drawScroll);
+			            Bo.onDoModification(Bo.restoreScroll);
+			        }
+			        Bo.on=!Bo.on;
+            	},
             	drawScroll : function (e) {
             		if (!S.to[0]) return;
             		var a,t,ox=true,oy=true,ih,sh,iw,sw;
@@ -66,8 +82,7 @@ $.extend({
             		Bo.drawScroll(e);
             	},
             	onDoModification : function(e){	
-            		console.log($('*',S).length);
-		            $('*',S).add(S).each(Bo.clearScroll);
+		            $('*',S).add(S).each(e);
             	},
             	clearScroll : function (j,s) {
             		var i,dx=(s=$(s)).css('overflow-x'), dxd=s.data('overflow-x'), ps = s.css('position'),
@@ -75,16 +90,21 @@ $.extend({
 	           		if (dx in Bo.doList && dxd!='no-baron') s.data('overflow-x',dx).css({'overflow-x':'hidden','position':(ps=='static')?'relative':((i=false),ps)});
 	           		if (dy in Bo.doList && dyd!='no-baron') s.data('overflow-y',dy).css({'overflow-y':'hidden','position':(ps=='static')?'relative':((i=false),ps)});
 	           		if (j==null) return i;
+            	},
+            	restoreScroll : function (j,s) {
+            		var s=$(s),
+            			dxd=s.data('overflow-x'), 
+            			dyd=s.data('overflow-y');
+	           		if (dxd && dxd!='no-baron') s.data('overflow-x','').css('overflow-x',dxd);
+	           		if (dyd && dyd!='no-baron') s.data('overflow-y','').css('overflow-y',dyd);
             	}
             };
             
-            (rB=$('.rBarOn',S)).length || (rB=S.append('<div class="rBarOn" style="position:absolute"></div>').children('.rBarOn'));
-            (bB=$('.bBarOn',S)).length || (bB=S.append('<div class="bBarOn" style="position:absolute"></div>').children('.bBarOn'));           
-            Bo.onDoModification();
-            S.on({'scroll':Bo.onScroll,'mousemove':Bo.onHover});
-            $(window).on('resize',Bo.drawScroll);
+            S.on({'BarOn.toggle':Bo.toggle,'BarOn.remove':function(){Bo.on||Bo.toggle();Bo=null;S.off('BarOn.toggle BarOn.remove')}});
+            Bo.toggle();
+            
             (("Info" in window) && Info||console).log('BarOn enter...');
-            return S;
+            return Bo;
         }
 	});
 

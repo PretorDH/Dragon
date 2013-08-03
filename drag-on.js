@@ -1,5 +1,5 @@
 ﻿/**
- * jQuery.Drag-On v2.5.1
+ * jQuery.Drag-On v2.5.2
  * @author Dark Heart aka PretorDH
  * @site dragon.deparadox.com
  * MIT license
@@ -15,7 +15,6 @@ $(function () {
 
     $.extend({
         DragOn: function (S, opt) { /* Scroll mechanics */
-            
             var def = {
             	exclusion : {'input': '', 'textarea': '', 'select': '', 'object':'' , 'iframe':'' , 'id':'#gmap,#map-canvas'},
             	cursor : 'all-scroll',
@@ -33,6 +32,21 @@ $(function () {
             	moment: {},
             	x: 1,
             	y: 1,
+            	on:true,
+            	toggle: function() {
+            		if (Sd.on) {
+			            S.css({ cursor: Sd.opt.cursor }).children('a').on('mousedown',onPrevent).css({ cursor: 'pointer' });
+			            S.on({'mousewheel wheel':Sd.onWhell,'mousedown':Sd.onHold});
+			            $('body').on({'keydown':Sd.onKeyDown,'keyup':Sd.onKeyDown});
+			        } else {
+			            S.css({ cursor: '' }).children('a').off('mousedown',onPrevent).css({ cursor: '' });
+			            S.off({'mousewheel wheel':Sd.onWhell,'mousedown':Sd.onHold});
+			            $('body').off({'keydown':Sd.onKeyDown,'keyup':Sd.onKeyDown});
+			        }
+			        Sd.on=!Sd.on;
+			        S.trigger('BarOn.toggle');
+			        return false;
+            	},
                 getCurPos: function () {
                     var a, b, c, to = S.to;
                     return S.curPos = {
@@ -47,6 +61,7 @@ $(function () {
                 setCurPos: function (dx, dy) {
                     var t, l, cp, ddy, ddx;
                     do {
+                    	S.to = Sd.scrollParent(S.to);
                         cp = Sd.getCurPos();
                         (cp.maxY > 0) && (Math.abs(dy) > Math.abs(dx))
 							&& ((cp.maxX > 0) || (dx = 0), ddy = (cp.t - (ddy = Math.round((cp.maxY / cp.ph + 1) * dy)) < 0) ? cp.t : (cp.t - ddy > cp.maxY ? cp.t - cp.maxY : ddy))
@@ -186,13 +201,12 @@ $(function () {
 					e.preventDefault(); e.stopPropagation();
                 }
             };
+					
+            S.on({'DragOn.toggle':Sd.toggle,'DragOn.remove':function(){Sd.on||Sd.toggle();Bo=null;S.off('DragOn.toggle DragOn.remove')}});
+            Sd.toggle();
 			
-            S.css({ cursor: Sd.opt.cursor }).children('a').mousedown(onPrevent).css({ cursor: 'pointer' });
-            S.on({'mousewheel wheel':Sd.onWhell,'mousedown':Sd.onHold,'keyup':Sd.onKeyDown});
-            $('body').on({'keydown':Sd.onKeyDown});
-
             (("Info" in window) && Info||console).log('DragOn fly...');
-            return S;
+            return Sd;
 
         }
     });

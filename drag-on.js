@@ -33,7 +33,7 @@ $(function () {
             	x: 1,
             	y: 1,
             	on:true,
-            	toggle: function() {
+            	toggle: function(e) {
             		if (Sd.on) {
 			            S.css({ cursor: Sd.opt.cursor }).children('a').on('mousedown',onPrevent).css({ cursor: 'pointer' });
 			            S.on({'mousewheel wheel':Sd.onWhell,'mousedown':Sd.onHold});
@@ -44,7 +44,7 @@ $(function () {
 			            $('body').off({'keydown':Sd.onKeyDown,'keyup':Sd.onKeyDown});
 			        }
 			        Sd.on=!Sd.on;
-			        S.trigger('BarOn.toggle');
+				if (e!=null) S.trigger('BarOn.toggle');
 			        return false;
             	},
                 getCurPos: function () {

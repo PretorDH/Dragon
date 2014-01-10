@@ -126,8 +126,9 @@ Example:
 
 <h3>Triggers</h3>
 <p> 'DragOn.toggle' - enable/disable functionality of DragOn (include plug-ins). </p> 
-<p> 'DragOn.remove' - destroy DragOn object. </p> 
-Use:
+<p> 'DragOn.remove' - destroy DragOn object. </p>
+<p> Trigger can be initialized on DragOn root or any children block.</p>
+Usage:
 <pre>
 	$( [selector] ).trigger('DragOn.toggle');
 </pre>
@@ -170,8 +171,9 @@ All content who inserted later into any child block will be connected too.</p>
 <h3>Triggers</h3>
 <p> 'BarOn.toggle' - enable/disable functionality of BarOn. </p> 
 <p> 'BarOn.remove' - destroy BarOn object. </p> 
+<p> Trigger can be initialized on BarOn root or any children block.</p>
 
-Use:
+Usage:
 <pre>
 	$( [selector] ).trigger('BarOn.toggle');
 </pre>

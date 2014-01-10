@@ -130,6 +130,17 @@ Use:
 <h3>Data- flags</h3>
 <p> Block with attribute data-overflow="no-dragon" will be bypassed. Event 'mousewheel' will be sent to him.</p> 
 
+Usage:
+<pre>
+	&lt;body class='dragon'>
+        [content] 
+		&lt;div data-overflow="no-dragon">
+		[content]
+		&lt;/div>
+        [content] 
+	&lt;/body>
+</pre>
+
 <h1>BarOn - Let´s show...<h1>
 
 <h3>How to use...</h3>
@@ -161,8 +172,19 @@ Use:
 </pre>
 
 <h3>Data- flags</h3>
-<p> Block with attribute data-overflow-x="no-baron" will be bypassed. Horizontal scroll bar will stay default.</p> 
-<p> Block with attribute data-overflow-y="no-baron" will be bypassed. Vertical scroll bar will stay default.</p> 
+<p> Block with attribute data-overflow-x="no-baron" will stay default horizontal scrollbar.</p> 
+<p> Block with attribute data-overflow-y="no-baron" will stay default vertical scroll bar .</p> 
+
+Usage:
+<pre>
+	&lt;body class='dragon'>
+        [content] 
+		&lt;div data-overflow-x="no-baron" data-overflow-y="no-baron">
+		[content]
+		&lt;/div>
+        [content] 
+	&lt;/body>
+</pre>
 
 <h3>Style example...</h3>
 <pre>

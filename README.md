@@ -1,4 +1,4 @@
-Dragon
+﻿Dragon
 ======
 
 Dragon - smart scrolling jQuery plugin for correct scrolling mechanics
@@ -127,6 +127,9 @@ Use:
 	$( [selector] ).trigger('DragOn.toggle');
 </pre>
 
+<h3>Data- flags</h3>
+<p> Block with attribute data-overflow="no-dragon" will be bypassed. Event 'mousewheel' will be sent to him.</p> 
+
 <h1>BarOn - Let´s show...<h1>
 
 <h3>How to use...</h3>
@@ -157,6 +160,9 @@ Use:
 	$( [selector] ).trigger('BarOn.toggle');
 </pre>
 
+<h3>Data- flags</h3>
+<p> Block with attribute data-overflow-x="no-baron" will be bypassed. Horizontal scroll bar will stay default.</p> 
+<p> Block with attribute data-overflow-y="no-baron" will be bypassed. Vertical scroll bar will stay default.</p> 
 
 <h3>Style example...</h3>
 <pre>

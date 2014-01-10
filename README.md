@@ -119,6 +119,11 @@ names are the names of the tags. These tags will be excluded from processing.
 Anchor tag &lt;A&gt; is processed separately.</p>
 <p><b>easing</b> &mdash; [:boolean - <i>def</i>: true] Easing of acceleration after end dragging.</p>
 
+Example:
+<pre>
+	$('body').dragOn({cursor:'pointer',easing:false,exclusion:{input:'',select:'',id:'#gmap,#map-canvas'}});
+</pre>
+
 <h3>Triggers</h3>
 <p> 'DragOn.toggle' - enable/disable functionality of DragOn (include plug-ins). </p> 
 <p> 'DragOn.remove' - destroy DragOn object. </p> 

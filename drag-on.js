@@ -1,5 +1,5 @@
 ﻿/**
- * jQuery.Drag-On v2.6.5
+ * jQuery.Drag-On v2.6.6
  * @author Dark Heart aka PretorDH
  * @site dragon.deparadox.com
  * MIT license
@@ -92,7 +92,7 @@ $(function () {
                     };
                             
                     return p.top+(h<0?0:h) >= t.top && p.top+(h>0?0:h) <= t.top &&
-                           p.left+(w<0?0:w) >= t.left && p.left+(w>0?0:w) <= t.left;
+                           p.left+(w<0?0:w) >= t.left && p.left+(w>0?0:w) <= t.left || Sto.css('position')=='fixed';
 				},
                 onWhell: function (e, delta) { 
                 	if (_this.bypass) return (_this.bypass=false,true);

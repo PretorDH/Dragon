@@ -1,5 +1,5 @@
 ﻿/**
- * jQuery.Drag-On v2.6.6
+ * jQuery.Drag-On v2.6.7
  * @author Dark Heart aka PretorDH
  * @site dragon.deparadox.com
  * MIT license
@@ -133,7 +133,7 @@ $(function () {
                 onHold: function (e) {        
                     _this.moment={};
                     var b,et = (e.target.tagName || e.target.localName || e.target.nodeName).toLowerCase();
-                    if (et in _this.opt.exclusion) return;
+                    if (et in _this.opt.exclusion || S.to.data('overflow')=='no-dragon') return;
                   
                     S.too = S.to = $((this === e.target) ? this : e.target);
                     if (S.to.parents(_this.opt.exclusion.id).length) return;

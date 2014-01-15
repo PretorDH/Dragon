@@ -1,5 +1,5 @@
 ﻿/**
- * jQuery.Drag-On v2.6.8
+ * jQuery.Drag-On v2.7.0
  * @author Dark Heart aka PretorDH
  * @site dragon.deparadox.com
  * MIT license
@@ -22,7 +22,7 @@ $(function () {
             	draggEvents : 'mousemove touchmove',
             	releaseEvents : 'mouseup touchend',
             	wheelEvents : 'mousewheel wheel',
-            	leaveEvents : 'mouseleave touchleave',
+            	leaveEvents : 'mouseleave touchleave touchcancel',
             	easing : 'true'
             },_this;
             
@@ -140,7 +140,8 @@ $(function () {
                 },
                 onHold: function (e) {        
                     _this.moment={};
-                    var o=_this.opt,b,et = (e.target.tagName || e.target.localName || e.target.nodeName).toLowerCase();
+                    var o=_this.opt,b,et = (e.target.tagName || e.target.localName || e.target.nodeName).toLowerCase(),
+						E=e.type.indexOf('touch')+1?e.touches[0],e;
                     if (et in o.exclusion) return;
                   
                     S.too = S.to = $((this === e.target) ? this : e.target);
@@ -150,7 +151,7 @@ $(function () {
                     _this.mx=S.to.hasClass('bBarOn')?-1:1;
                     _this.my=S.to.hasClass('rBarOn')?-1:1;
 					
-					_this.moment = S.holdPos = { 'x': e.screenX, 'y': e.screenY };
+					_this.moment = S.holdPos = { 'x': E.screenX, 'y': E.screenY };
 					_this.moment.startTime=+new Date();
                     S.on(o.draggEvents,_this.onDragg).on(o.releaseEvents+' '+o.leaveEvents,_this.onRelease);
                     S.too.on(o.releaseEvents, _this.onRelease);
@@ -166,11 +167,12 @@ $(function () {
                 onDragg: function (e) {
                     _this.SAH && (_this.SAH.off('scroll', _this.onScrollAfterHold), _this.SAH = null);
                     
-                    if (_this.noButtonHold || !(e.which + e.button)) return _this.onRelease(e);
+                    var E=e.type=='touchmove'?e.touches[0],e;
+                    if (!e.touches && _this.noButtonHold || !(e.which + e.button)) return _this.onRelease(e);
                     e.preventDefault(); e.stopPropagation();
 
-                    var x = e.screenX, 
-                    	y = e.screenY,
+                    var x = E.screenX, 
+                    	y = E.screenY,
 						dx = x - S.holdPos.x, 
 						dy = y - S.holdPos.y;
                     S.to = $(this===e.target?this:e.target);            
@@ -179,9 +181,9 @@ $(function () {
                     _this.setCurPos(dx*_this.mx, dy*_this.my);
                 },
                 onRelease: function (e) {
-                	var sm,o; 
+                	var sm,o,E=e.type.indexOf('touch')+1?e.touches[0],e; 
                 	(o=_this.opt).easing && (sm=_this.moment) &&
-                		(sm.vector={y:e.screenY-sm.y,x:e.screenX-sm.x},
+                		(sm.vector={y:E.screenY-sm.y,x:E.screenX-sm.x},
                 		 sm.snatch=(+new Date()-sm.startTime),
                 		 sm.speedX=((sm.vector.x>0)?1:-1)*sm.vector.x*sm.vector.x/(sm.snatch<<1),
                 		 sm.speedY=((sm.vector.y>0)?1:-1)*sm.vector.y*sm.vector.y/(sm.snatch<<1),

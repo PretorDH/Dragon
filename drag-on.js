@@ -52,7 +52,7 @@ $(function () {
 			            $('body').off({'keydown':_this.onKeyDown,'keyup':_this.onKeyDown});
 			        }
 			        _this.on=!_this.on;
-			        //if (e!=null) S.trigger('BarOn.toggle');
+			        if (e!=null) S.trigger('BarOn.toggle');
 			        return true;
             	},
                 getCurPos: function () {

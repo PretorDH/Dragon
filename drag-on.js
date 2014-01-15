@@ -1,5 +1,5 @@
 ﻿/**
- * jQuery.Drag-On v2.6.7
+ * jQuery.Drag-On v2.6.8
  * @author Dark Heart aka PretorDH
  * @site dragon.deparadox.com
  * MIT license
@@ -18,6 +18,11 @@ $(function () {
             var def = {
             	exclusion : {'input': '', 'textarea': '', 'select': '', 'object':'' , 'iframe':'' , 'id':'#gmap,#map-canvas'},
             	cursor : 'all-scroll',
+            	holdEvents : 'mousedown touchstart',
+            	draggEvents : 'mousemove touchmove',
+            	releaseEvents : 'mouseup touchend',
+            	wheelEvents : 'mousewheel wheel',
+            	leaveEvents : 'mouseleave touchleave',
             	easing : 'true'
             },_this;
             
@@ -36,17 +41,18 @@ $(function () {
             	my: 1,
             	on:true,
             	toggle: function(e) {
+            		var o = _this.opt;
             		if (_this.on) {
-			            S.css({ cursor: _this.opt.cursor }).children('a').on('mousedown',onPrevent).css({ cursor: 'pointer'});
-			            S.on({'mousewheel wheel':_this.onWhell,'mousedown':_this.onHold});
+			            S.css({ cursor: o.cursor }).children('a').on(o.holdEvents,onPrevent).css({ cursor: 'pointer'});
+			            S.on(o.wheelEvents,_this.onWhell).on(o.holdEvents,_this.onHold);
 			            $('body').on({'keydown':_this.onKeyDown,'keyup':_this.onKeyDown});
 			        } else {
-			            S.css({ cursor: '' }).children('a').off('mousedown',onPrevent).css({ cursor: '' });
-			            S.off({'mousewheel wheel':_this.onWhell,'mousedown':_this.onHold});
+			            S.css({ cursor: '' }).children('a').off(o.holdEvents,onPrevent).css({ cursor: '' });
+			            S.off(o.wheelEvents,_this.onWhell).off(o.holdEvents,_this.onHold);
 			            $('body').off({'keydown':_this.onKeyDown,'keyup':_this.onKeyDown});
 			        }
 			        _this.on=!_this.on;
-			        if (e!=null) S.trigger('BarOn.toggle');
+			        //if (e!=null) S.trigger('BarOn.toggle');
 			        return true;
             	},
                 getCurPos: function () {
@@ -86,7 +92,7 @@ $(function () {
                     	h = Stoo.innerHeight()-cp.ph,
                         w = Stoo.innerWidth()-cp.pw;
                         
-                    if (Stoo[0]==document.body && Stoo[0]!==Sto[0]) {
+                    if (Stoo[0]==document.body || Stoo[0]==$('html')[0] && Stoo[0]!==Sto[0]) {
                     	t.top = t.top -Stoo[0].scrollTop;
                     	t.left= t.left-Stoo[0].scrollLeft;
                     };
@@ -132,20 +138,20 @@ $(function () {
                 },
                 onHold: function (e) {        
                     _this.moment={};
-                    var b,et = (e.target.tagName || e.target.localName || e.target.nodeName).toLowerCase();
-                    if (et in _this.opt.exclusion) return;
+                    var o=_this.opt,b,et = (e.target.tagName || e.target.localName || e.target.nodeName).toLowerCase();
+                    if (et in o.exclusion) return;
                   
                     S.too = S.to = $((this === e.target) ? this : e.target);
-                    if (S.to.parents(_this.opt.exclusion.id).length || S.to.data('overflow')=='no-dragon') return;
+                    if (S.to.parents(o.exclusion.id).length || S.to.data('overflow')=='no-dragon') return;
                     
-                    (e.type == 'mousedown') && (e.preventDefault(), e.stopPropagation());
+                    (o.holdEvents.indexOf(e.type)+1) && (e.preventDefault(), e.stopPropagation());
                     _this.mx=S.to.hasClass('bBarOn')?-1:1;
                     _this.my=S.to.hasClass('rBarOn')?-1:1;
 					
 					_this.moment = S.holdPos = { 'x': e.screenX, 'y': e.screenY };
 					_this.moment.startTime=+new Date();
-                    S.on({'mousemove':_this.onDragg,'mouseleave mouseup':_this.onRelease});
-                    S.too.on('mouseup', _this.onRelease);
+                    S.on(o.draggEvents,_this.onDragg).on(o.releaseEvents+' '+o.leaveEvents,_this.onRelease);
+                    S.too.on(o.releaseEvents, _this.onRelease);
 
                     _this.noButtonHold = false;
                     (_this.SAH = S.too).on('scroll', _this.onScrollAfterHold);
@@ -171,18 +177,18 @@ $(function () {
                     _this.setCurPos(dx*_this.mx, dy*_this.my);
                 },
                 onRelease: function (e) {
-                	var sm; 
-                	_this.opt.easing && (sm=_this.moment) &&
+                	var sm,o; 
+                	(o=_this.opt).easing && (sm=_this.moment) &&
                 		(sm.vector={y:e.screenY-sm.y,x:e.screenX-sm.x},
                 		 sm.snatch=(+new Date()-sm.startTime),
                 		 sm.speedX=((sm.vector.x>0)?1:-1)*sm.vector.x*sm.vector.x/(sm.snatch<<1),
                 		 sm.speedY=((sm.vector.y>0)?1:-1)*sm.vector.y*sm.vector.y/(sm.snatch<<1),
                 		 (sm.snatch<350)&&(sm.ORE=setTimeout(_this.onReleaseEasing,10)));
                 
-                    if (e.type in { 'mouseup': '', 'mouseleave': '' }) (e.preventDefault(), e.stopPropagation(), e.stopImmediatePropagation());
+                    if ('mouseup mouseleave'.indexOf(e.type)+1) (e.preventDefault(), e.stopPropagation(), e.stopImmediatePropagation());
                     _this.SAH && (_this.SAH.off('scroll', _this.onScrollAfterHold), _this.SAH = null);
-                    S.off({'mouseleave mouseup':_this.onRelease,'mousemove':_this.onDragg});
-                    S.too && S.too.off('mouseup', _this.onRelease);
+                    S.off(o.draggEvents,_this.onDragg).off(o.releaseEvents+' '+o.leaveEvents,_this.onRelease);
+                    S.too && S.too.off(o.releaseEvents, _this.onRelease);
                     return true;
                 },
                 onReleaseEasing: function (e) {
@@ -217,16 +223,6 @@ $(function () {
                 	             	               	
 					_this.onReleaseEasing();
 					e.preventDefault(); e.stopPropagation();
-                },  
-                onTouch: function (e) {
-                    S.to = $((this === e.target) ? this : e.target);
-                    var c=(e.type=='touchstart')?e.originalEvent.touches[0]:e;
-                    S.holdPos = {'x':e.screenX, 'y':e.screenY};
-                    do {
-                    	
-                    } while ((S.to.data('overflow') == 'no-dragon' || S.to[0].tagName.toLowerCase() == 'a')
-							&& S[0] != S.to[0]
-							&& (S.to = S.to.parent()));
                 }
             };
 					

@@ -46,10 +46,12 @@ $(function () {
 			            S.css({ cursor: o.cursor }).children('a').on(o.holdEvents,onPrevent).css({ cursor: 'pointer'});
 			            S.on(o.wheelEvents,_this.onWhell).on(o.holdEvents,_this.onHold);
 			            $('body').on({'keydown':_this.onKeyDown,'keyup':_this.onKeyDown});
+			            (("Info" in window) && Info || console).log('DragOn fly...');
 			        } else {
 			            S.css({ cursor: '' }).children('a').off(o.holdEvents,onPrevent).css({ cursor: '' });
 			            S.off(o.wheelEvents,_this.onWhell).off(o.holdEvents,_this.onHold);
 			            $('body').off({'keydown':_this.onKeyDown,'keyup':_this.onKeyDown});
+			            (("Info" in window) && Info || console).log('DragOn landed...');
 			        }
 			        _this.on=!_this.on;
 			        if (e!=null) S.trigger('BarOn.toggle');
@@ -229,7 +231,6 @@ $(function () {
             S.on({'DragOn.toggle':_this.toggle,'DragOn.remove':function(){_this.on||_this.toggle();Bo=null;S.off('DragOn.toggle DragOn.remove')}});
             _this.toggle();
 			
-            (("Info" in window) && Info || console).log('DragOn fly...');
             return _this;
         }
     });

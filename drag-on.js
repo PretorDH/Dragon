@@ -1,5 +1,5 @@
 ﻿/**
- * jQuery.Drag-On v2.7.0
+ * jQuery.Drag-On v2.7.1
  * @author Dark Heart aka PretorDH
  * @site dragon.deparadox.com
  * MIT license
@@ -22,7 +22,7 @@ $(function () {
             	draggEvents : 'mousemove touchmove',
             	releaseEvents : 'mouseup touchend',
             	wheelEvents : 'mousewheel wheel',
-            	leaveEvents : 'mouseleave touchleave touchcancel',
+            	leaveEvents : 'mouseleave touchleave',
             	easing : 'true'
             },_this;
             
@@ -40,6 +40,8 @@ $(function () {
             	mx: 1,
             	my: 1,
             	on:true,
+            	round: function(v) {return (v+(v>0?.5:-.5))<<1>>1},
+            	abs: function(v) {return v>0?v:-v},
             	toggle: function(e) {
             		var o = _this.opt;
             		if (_this.on) {
@@ -55,7 +57,7 @@ $(function () {
 			        }
 			        _this.on=!_this.on;
 			        if (e!=null) S.trigger('BarOn.toggle');
-			        return true;
+			        return _this;
             	},
                 getCurPos: function () {
                     var b, to = S.to;
@@ -73,11 +75,11 @@ $(function () {
                     
                     while (S.to=_this.scrollParent(S.to)) {
                         cp = _this.getCurPos();
-                        (cp.maxY > 0) && (Math.abs(dy) > Math.abs(dx))
-							&& ((cp.maxX > 0) || (dx = 0), ddy = (cp.t - (ddy = Math.round((cp.maxY / cp.ph + 1) * dy)) < 0) ? cp.t : (cp.t - ddy > cp.maxY ? cp.t - cp.maxY : ddy))
+                        (cp.maxY > 0) && ((dy>0?dy:-dy) > (dx>0?dx:-dx))
+							&& ((cp.maxX > 0) || (dx = 0), ddy = (cp.t - (ddy = _this.round((cp.maxY / cp.ph + 1) * dy)) < 0) ? cp.t : (cp.t - ddy > cp.maxY ? cp.t - cp.maxY : ddy))
 							&& S.to.scrollTop(cp.t - ddy), (t = S.to.scrollTop() != cp.t) && (dy = 0,S.to.trigger('scroll'));
-                        (cp.maxX > 0) && (Math.abs(dx) > Math.abs(dy))
-							&& (dy = 0, ddx = (cp.l - (ddx = Math.round((cp.maxX / cp.pw + 1) * dx)) < 0) ? cp.l : (cp.l - ddx > cp.maxX ? cp.l - cp.maxX : ddx))
+                        (cp.maxX > 0) && ((dx>0?dx:-dx) > (dy>0?dy:-dy))
+							&& (dy = 0, ddx = (cp.l - (ddx = _this.round((cp.maxX / cp.pw + 1) * dx)) < 0) ? cp.l : (cp.l - ddx > cp.maxX ? cp.l - cp.maxX : ddx))
 							&& S.to.scrollLeft(cp.l - ddx), (l = S.to.scrollLeft() != cp.l) && (dx = 0,S.to.trigger('scroll'));
 						if (!(dy && t) && !(dx && l) && S[0]!=S.to[0]) 
 							S.to=S.to.parent() 
@@ -112,8 +114,8 @@ $(function () {
 					_this.mx = 1; _this.my = 1;
                     S.to = $((this === e.target) ? this : e.target);
 
-                    delta = Math.round(delta || (E.wheelDelta || E.wheelDeltaY || E.wheelDeltaX ) >> 1 || (-(E.deltaX || E.deltaY || E.deltaZ)<<(E.deltaMode && E.deltaMode<<2)<<1));
-                    ad=Math.abs(delta>>1);
+                    delta = _this.round(delta || (E.wheelDelta || E.wheelDeltaY || E.wheelDeltaX ) >> 1 || (-(E.deltaX || E.deltaY || E.deltaZ)<<(E.deltaMode && E.deltaMode<<2)<<1));
+                    ad=_this.abs(delta>>1);
 
                     do {
 	                    S.to = _this.scrollParent(S.to,1);
@@ -181,7 +183,7 @@ $(function () {
                     _this.setCurPos(dx*_this.mx, dy*_this.my);
                 },
                 onRelease: function (e) {
-                	var sm,o,E=e.type.indexOf('touch')+1?e.originalEvent.touches[0]:e;
+                	var sm,o,E=e.type.indexOf('touch')+1?e.originalEvent.touches[0]:e; 
                 	(o=_this.opt).easing && (sm=_this.moment) &&
                 		(sm.vector={y:E.screenY-sm.y,x:E.screenX-sm.x},
                 		 sm.snatch=(+new Date()-sm.startTime),
@@ -201,14 +203,14 @@ $(function () {
                 	
                     S.to=S.too;
                     _this.setCurPos(_this.mx*(sm.speedX*=0.98), _this.my*(sm.speedY*=0.98));
-                    sm.ORE=(Math.round(sm.speedX)||Math.round(sm.speedY))?setTimeout(_this.onReleaseEasing,10):null;
+                    sm.ORE=((sm.speedX+sm.speedX)<<1>>1||(sm.speedY+sm.speedY)<<1>>1)?setTimeout(_this.onReleaseEasing,10):null;
                 },
                 onKeyDown: function (e) {
-                	var	so,to,too,ek=e.which,sm=_this.moment,wh=$(window).innerHeight();
+                	var	so,to,too,ek=e.which,sm=_this.moment,wh=$(window).innerHeight(),sy;
                	
                 	sm.speedX = (ek in {37:0,100:0}?2:(ek in {39:0,102:0}?-2:0 ) );
                 	sm.speedY = (ek in {38:0,104:0}?1:(ek in {40:0,98:0}?-1:(ek in {33:0,105:0}? (so=Math.sqrt(Math.sqrt(wh)))*Math.sqrt(so/3)-4 :(ek in {34:0,99:0}? -(so=Math.sqrt(Math.sqrt(wh)))*Math.sqrt(so/3)+4 :(ek in {35:0,97:0}?-88:(ek in {36:0,103:0}?88:0) ) ) ) ) );
-                	if (!(sm.speedX||sm.speedY) || Math.abs(sm.speedY)>15 && e.type=='keydown' || Math.abs(sm.speedY)<15 && e.type=='keyup') return;                	
+                	if (!(sm.speedX||sm.speedY) || (sy=_this.abs(sm.speedY))>15 && e.type=='keydown' || sy<15 && e.type=='keyup') return;                	
 
 					if (sm.key!=ek) {
 	                	sm.key=ek;

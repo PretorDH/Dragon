@@ -1,5 +1,5 @@
 ﻿/**
- * jQuery.Drag-On v2.7.1
+ * jQuery.Drag-On v2.7.2
  * @author Dark Heart aka PretorDH
  * @site dragon.deparadox.com
  * MIT license
@@ -71,9 +71,9 @@ $(function () {
                     }
                 },
                 setCurPos: function (dx, dy) {
-                    var t, l, cp=S.to, ddy, ddx;
+                    var t, l, cp=S.to, ddy, ddx, w=_this.mx<0 || _this.my<0;
                     
-                    while (S.to=_this.scrollParent(S.to)) {
+                    while (S.to=_this.scrollParent(S.to, w)) {
                         cp = _this.getCurPos();
                         (cp.maxY > 0) && ((dy>0?dy:-dy) > (dx>0?dx:-dx))
 							&& ((cp.maxX > 0) || (dx = 0), ddy = (cp.t - (ddy = _this.round((cp.maxY / cp.ph + 1) * dy)) < 0) ? cp.t : (cp.t - ddy > cp.maxY ? cp.t - cp.maxY : ddy))
@@ -143,15 +143,15 @@ $(function () {
                 onHold: function (e) {        
                     _this.moment={};
                     var o=_this.opt,b,et = (e.target.tagName || e.target.localName || e.target.nodeName).toLowerCase(),
-						E=e.type.indexOf('touch')+1?e.originalEvent.touches[0]:e;
+						E=e.type.indexOf('touch')+1?e.originalEvent.touches[0]:e,hCbB,hCrB;
                     if (et in o.exclusion) return;
                   
                     S.too = S.to = $((this === e.target) ? this : e.target);
-                    if (S.to.parents(o.exclusion.id).length || S.to.data('overflow')=='no-dragon') return;
-                    
-                    (o.holdEvents.indexOf(e.type)+1) && (e.preventDefault(), e.stopPropagation());
                     _this.mx=S.to.hasClass('bBarOn')?-1:1;
                     _this.my=S.to.hasClass('rBarOn')?-1:1;
+                    if ( _this.mx+_this.my>0 && (S.to.parents(o.exclusion.id).length || S.to.data('overflow')=='no-dragon' ) ) return;
+                    
+                    (o.holdEvents.indexOf(e.type)+1) && (e.preventDefault(), e.stopPropagation());
 					
 					_this.moment = S.holdPos = { 'x': E.screenX, 'y': E.screenY };
 					_this.moment.startTime=+new Date();

@@ -133,7 +133,7 @@ Usage:
 <pre>
 	$( [selector] ).trigger('DragOn.toggle'); 		    //toggle state
 	$( [selector] ).trigger('DragOn.option',[{easing:false}]);  //turn off easing 
-	$( [selector] ).triggerHandler('DragOn.toggle',['easing']);  //return easing state
+	$( [selector] ).triggerHandler('DragOn.option',['easing']);  //return easing state
 </pre>
 
 <h3>Data- flags</h3>

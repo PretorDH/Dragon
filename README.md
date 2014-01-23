@@ -125,12 +125,15 @@ Example:
 </pre>
 
 <h3>Triggers</h3>
+<p> 'DragOn.option' - set/get DragOn parameters. </p> 
 <p> 'DragOn.toggle' - enable/disable functionality of DragOn (include plug-ins). </p> 
 <p> 'DragOn.remove' - destroy DragOn object. </p>
 <p> Trigger can be initialized on DragOn root or any children block.</p>
 Usage:
 <pre>
-	$( [selector] ).trigger('DragOn.toggle');
+	$( [selector] ).trigger('DragOn.toggle'); 		    //toggle state
+	$( [selector] ).trigger('DragOn.option',[{easing:false}]);  //turn off easing 
+	$( [selector] ).triggerHandler('DragOn.toggle',['easing']);  //return easing state
 </pre>
 
 <h3>Data- flags</h3>

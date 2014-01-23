@@ -1,5 +1,5 @@
 ﻿/**
- * jQuery.Drag-On v2.7.2
+ * jQuery.Drag-On v2.7.3
  * @author Dark Heart aka PretorDH
  * @site dragon.deparadox.com
  * MIT license
@@ -35,6 +35,15 @@ $(function () {
 			S = $(S);
             _this = {
             	opt: (function (opt) {for (var b in opt) def[b]=opt[b]; return def;})(opt),
+            	set option(o) {
+            		for (var b in o) 
+            			_this.opt[b]=o[b];
+            		if (o && !_this.on) _this.toggle().toggle();
+            		return _this.opt;
+            	},
+            	get option() {
+            		return _this.opt
+            	},  
             	moment: {},
             	bypass : false,
             	mx: 1,
@@ -143,7 +152,7 @@ $(function () {
                 onHold: function (e) {        
                     _this.moment={};
                     var o=_this.opt,b,et = (e.target.tagName || e.target.localName || e.target.nodeName).toLowerCase(),
-						E=e.type.indexOf('touch')+1?e.originalEvent.touches[0]:e,hCbB,hCrB;
+						E=e.type.indexOf('touch')+1?e.originalEvent.touches[0]:e;
                     if (et in o.exclusion) return;
                   
                     S.too = S.to = $((this === e.target) ? this : e.target);
@@ -232,7 +241,10 @@ $(function () {
                 }
             };
 					
-            S.on({'DragOn.toggle':_this.toggle,'DragOn.remove':function(){_this.on||_this.toggle();Bo=null;S.off('DragOn.toggle DragOn.remove')}});
+            S.on({'DragOn.toggle':_this.toggle,
+            	  'DragOn.remove':function(){_this.on||_this.toggle();Bo=null;S.off('DragOn.toggle DragOn.remove')},
+            	  'DragOn.option':function(e,prop) {if (e) e.stopPropagation(); return (prop)? (typeof prop=='object')?_this.option=prop:_this.option[prop] :_this.option; }
+            	 });
             _this.toggle();
 			
             return _this;

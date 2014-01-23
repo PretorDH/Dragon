@@ -54,7 +54,7 @@ Dragon - smart scrolling jQuery plugin for correct scrolling mechanics
         </p>
         <p>
             Primary scrollbars change:
-            Scrollbar will be located on the border of the visible part of the block. 
+            Scrollbar will be located near the visible border of the block. 
             Even if the bottom block is beyond the boundaries of the parent.
         </p>
     </li>
@@ -66,10 +66,10 @@ Dragon - smart scrolling jQuery plugin for correct scrolling mechanics
         </p>
     </li>
     <li>
-        <h2>Touch scroll (in developing)</h2>
+        <h2>Touch scroll (beta)</h2>
         <p>
-            Use default touch action for scrolling content on tablet. 
-            Smart touch scrolling in development.
+            Scroll content in all direction.
+            Propagate not ended event to parent block.
         </p>
     </li>
 </ul>

@@ -84,16 +84,16 @@ $.extend({
             		Bo.drawScroll(e);
             	},
             	onDoModification : function(e){	
-		            $('*',S).add(S).each(e);
+			$('*',S).add(S).each(e);
             	},
             	clearScroll : function (j,s) {
             		var i=true,
             			dx=(s=$(s)).css('overflow-x'), dxd=s.data('overflow-x'), ps = s.css('position'),
             			dy=       s.css('overflow-y'), dyd=s.data('overflow-y'), pso = (ps=='static')?{position:'relative'}:{} ;            		
-	           		if (dx in Bo.doList && dxd!='no-baron') (s.data('overflow-x',dx),(pso['overflow-x']='hidden'),i=false);
-	           		if (dy in Bo.doList && dyd!='no-baron') (s.data('overflow-y',dy),(pso['overflow-y']='hidden'),i=false);
-	           		s.css(pso);
-	           		if (j==null) return i;
+           		if (dx in Bo.doList && dxd!='no-baron') (s.data('overflow-x',dx),(pso['overflow-x']='hidden'),i=false);
+           		if (dy in Bo.doList && dyd!='no-baron') (s.data('overflow-y',dy),(pso['overflow-y']='hidden'),i=false);
+           		i || s.css(pso);
+           		if (j==null) return i;
             	},
             	restoreScroll : function (j,s) {
             		var s=$(s),

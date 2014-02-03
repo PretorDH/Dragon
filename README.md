@@ -1,7 +1,7 @@
 ﻿Dragon
 ======
 
-Dragon - smart scrolling jQuery plugin. Ajust system scroll mechanics and customize scroll bar.
+Dragon - smart scrolling jQuery plugin. Ajust scroll mechanics and customize scroll bar.
 
 <ul>
     <li>

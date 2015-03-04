@@ -1,5 +1,9 @@
 ﻿/**
+<<<<<<< HEAD
  * jQuery.Drag-On v2.7.0
+=======
+ * jQuery.Drag-On v2.7.3
+>>>>>>> 7e05291b4b7b11644ceae9bc98941d05d72122e9
  * @author Dark Heart aka PretorDH
  * @site dragon.deparadox.com
  * MIT license
@@ -35,11 +39,22 @@ $(function () {
 			S = $(S);
             _this = {
             	opt: (function (opt) {for (var b in opt) def[b]=opt[b]; return def;})(opt),
+            	set option(o) {
+            		for (var b in o) 
+            			_this.opt[b]=o[b];
+            		if (o && !_this.on) _this.toggle().toggle();
+            		return _this.opt;
+            	},
+            	get option() {
+            		return _this.opt
+            	},  
             	moment: {},
             	bypass : false,
             	mx: 1,
             	my: 1,
             	on:true,
+            	round: function(v) {return (v+(v>0?.5:-.5))<<1>>1},
+            	abs: function(v) {return v>0?v:-v},
             	toggle: function(e) {
             		var o = _this.opt;
             		if (_this.on) {
@@ -55,7 +70,7 @@ $(function () {
 			        }
 			        _this.on=!_this.on;
 			        if (e!=null) S.trigger('BarOn.toggle');
-			        return true;
+			        return _this;
             	},
                 getCurPos: function () {
                     var b, to = S.to;
@@ -69,15 +84,15 @@ $(function () {
                     }
                 },
                 setCurPos: function (dx, dy) {
-                    var t, l, cp=S.to, ddy, ddx;
+                    var t, l, cp=S.to, ddy, ddx, w=_this.mx<0 || _this.my<0;
                     
-                    while (S.to=_this.scrollParent(S.to)) {
+                    while (S.to=_this.scrollParent(S.to, w)) {
                         cp = _this.getCurPos();
-                        (cp.maxY > 0) && (Math.abs(dy) > Math.abs(dx))
-							&& ((cp.maxX > 0) || (dx = 0), ddy = (cp.t - (ddy = Math.round((cp.maxY / cp.ph + 1) * dy)) < 0) ? cp.t : (cp.t - ddy > cp.maxY ? cp.t - cp.maxY : ddy))
+                        (cp.maxY > 0) && ((dy>0?dy:-dy) > (dx>0?dx:-dx))
+							&& ((cp.maxX > 0) || (dx = 0), ddy = (cp.t - (ddy = _this.round((cp.maxY / cp.ph + 1) * dy)) < 0) ? cp.t : (cp.t - ddy > cp.maxY ? cp.t - cp.maxY : ddy))
 							&& S.to.scrollTop(cp.t - ddy), (t = S.to.scrollTop() != cp.t) && (dy = 0,S.to.trigger('scroll'));
-                        (cp.maxX > 0) && (Math.abs(dx) > Math.abs(dy))
-							&& (dy = 0, ddx = (cp.l - (ddx = Math.round((cp.maxX / cp.pw + 1) * dx)) < 0) ? cp.l : (cp.l - ddx > cp.maxX ? cp.l - cp.maxX : ddx))
+                        (cp.maxX > 0) && ((dx>0?dx:-dx) > (dy>0?dy:-dy))
+							&& (dy = 0, ddx = (cp.l - (ddx = _this.round((cp.maxX / cp.pw + 1) * dx)) < 0) ? cp.l : (cp.l - ddx > cp.maxX ? cp.l - cp.maxX : ddx))
 							&& S.to.scrollLeft(cp.l - ddx), (l = S.to.scrollLeft() != cp.l) && (dx = 0,S.to.trigger('scroll'));
 						if (!(dy && t) && !(dx && l) && S[0]!=S.to[0]) 
 							S.to=S.to.parent() 
@@ -112,8 +127,8 @@ $(function () {
 					_this.mx = 1; _this.my = 1;
                     S.to = $((this === e.target) ? this : e.target);
 
-                    delta = Math.round(delta || (E.wheelDelta || E.wheelDeltaY || E.wheelDeltaX ) >> 1 || (-(E.deltaX || E.deltaY || E.deltaZ)<<(E.deltaMode && E.deltaMode<<2)<<1));
-                    ad=Math.abs(delta>>1);
+                    delta = _this.round(delta || (E.wheelDelta || E.wheelDeltaY || E.wheelDeltaX ) >> 1 || (-(E.deltaX || E.deltaY || E.deltaZ)<<(E.deltaMode && E.deltaMode<<2)<<1));
+                    ad=_this.abs(delta>>1);
 
                     do {
 	                    S.to = _this.scrollParent(S.to,1);
@@ -141,15 +156,19 @@ $(function () {
                 onHold: function (e) {        
                     _this.moment={};
                     var o=_this.opt,b,et = (e.target.tagName || e.target.localName || e.target.nodeName).toLowerCase(),
+<<<<<<< HEAD
 						E=e.type.indexOf('touch')+1?e.touches[0]:e;
+=======
+						E=e.type.indexOf('touch')+1?e.originalEvent.touches[0]:e;
+>>>>>>> 7e05291b4b7b11644ceae9bc98941d05d72122e9
                     if (et in o.exclusion) return;
                   
                     S.too = S.to = $((this === e.target) ? this : e.target);
-                    if (S.to.parents(o.exclusion.id).length || S.to.data('overflow')=='no-dragon') return;
-                    
-                    (o.holdEvents.indexOf(e.type)+1) && (e.preventDefault(), e.stopPropagation());
                     _this.mx=S.to.hasClass('bBarOn')?-1:1;
                     _this.my=S.to.hasClass('rBarOn')?-1:1;
+                    if ( _this.mx+_this.my>0 && (S.to.parents(o.exclusion.id).length || S.to.data('overflow')=='no-dragon' ) ) return;
+                    
+                    (o.holdEvents.indexOf(e.type)+1) && (e.preventDefault(), e.stopPropagation());
 					
 					_this.moment = S.holdPos = { 'x': E.screenX, 'y': E.screenY };
 					_this.moment.startTime=+new Date();
@@ -167,7 +186,11 @@ $(function () {
                 onDragg: function (e) {
                     _this.SAH && (_this.SAH.off('scroll', _this.onScrollAfterHold), _this.SAH = null);
                     
+<<<<<<< HEAD
                     var E=e.type=='touchmove'?e.touches[0]:e;
+=======
+                    var E=e.type=='touchmove'?e.originalEvent.touches[0]:e;
+>>>>>>> 7e05291b4b7b11644ceae9bc98941d05d72122e9
                     if (!e.touches && _this.noButtonHold || !(e.which + e.button)) return _this.onRelease(e);
                     e.preventDefault(); e.stopPropagation();
 
@@ -181,7 +204,11 @@ $(function () {
                     _this.setCurPos(dx*_this.mx, dy*_this.my);
                 },
                 onRelease: function (e) {
+<<<<<<< HEAD
                 	var sm,o,E=e.type.indexOf('touch')+1?e.touches[0]:e;
+=======
+                	var sm,o,E=e.type.indexOf('touch')+1?e.originalEvent.touches[0]:e; 
+>>>>>>> 7e05291b4b7b11644ceae9bc98941d05d72122e9
                 	(o=_this.opt).easing && (sm=_this.moment) &&
                 		(sm.vector={y:E.screenY-sm.y,x:E.screenX-sm.x},
                 		 sm.snatch=(+new Date()-sm.startTime),
@@ -201,14 +228,14 @@ $(function () {
                 	
                     S.to=S.too;
                     _this.setCurPos(_this.mx*(sm.speedX*=0.98), _this.my*(sm.speedY*=0.98));
-                    sm.ORE=(Math.round(sm.speedX)||Math.round(sm.speedY))?setTimeout(_this.onReleaseEasing,10):null;
+                    sm.ORE=((sm.speedX+sm.speedX)<<1>>1||(sm.speedY+sm.speedY)<<1>>1)?setTimeout(_this.onReleaseEasing,10):null;
                 },
                 onKeyDown: function (e) {
-                	var	so,to,too,ek=e.which,sm=_this.moment,wh=$(window).innerHeight();
+                	var	so,to,too,ek=e.which,sm=_this.moment,wh=$(window).innerHeight(),sy;
                	
                 	sm.speedX = (ek in {37:0,100:0}?2:(ek in {39:0,102:0}?-2:0 ) );
                 	sm.speedY = (ek in {38:0,104:0}?1:(ek in {40:0,98:0}?-1:(ek in {33:0,105:0}? (so=Math.sqrt(Math.sqrt(wh)))*Math.sqrt(so/3)-4 :(ek in {34:0,99:0}? -(so=Math.sqrt(Math.sqrt(wh)))*Math.sqrt(so/3)+4 :(ek in {35:0,97:0}?-88:(ek in {36:0,103:0}?88:0) ) ) ) ) );
-                	if (!(sm.speedX||sm.speedY) || Math.abs(sm.speedY)>15 && e.type=='keydown' || Math.abs(sm.speedY)<15 && e.type=='keyup') return;                	
+                	if (!(sm.speedX||sm.speedY) || (sy=_this.abs(sm.speedY))>15 && e.type=='keydown' || sy<15 && e.type=='keyup') return;                	
 
 					if (sm.key!=ek) {
 	                	sm.key=ek;
@@ -230,7 +257,10 @@ $(function () {
                 }
             };
 					
-            S.on({'DragOn.toggle':_this.toggle,'DragOn.remove':function(){_this.on||_this.toggle();Bo=null;S.off('DragOn.toggle DragOn.remove')}});
+            S.on({'DragOn.toggle':_this.toggle,
+            	  'DragOn.remove':function(){_this.on||_this.toggle();Bo=null;S.off('DragOn.toggle DragOn.remove')},
+            	  'DragOn.option':function(e,prop) {if (e) e.stopPropagation(); return (prop)? (typeof prop=='object')?_this.option=prop:_this.option[prop] :_this.option; }
+            	 });
             _this.toggle();
 			
             return _this;

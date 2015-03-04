@@ -1,7 +1,7 @@
 ﻿Dragon
 ======
 
-Dragon - smart scrolling jQuery plugin for correct scrolling mechanics
+Dragon - smart scrolling jQuery plugin. Ajust scroll mechanics and customize scroll bar.
 
 <ul>
     <li>
@@ -54,7 +54,7 @@ Dragon - smart scrolling jQuery plugin for correct scrolling mechanics
         </p>
         <p>
             Primary scrollbars change:
-            Scrollbar will be located on the border of the visible part of the block. 
+            Scrollbar will be located near the visible border of the block. 
             Even if the bottom block is beyond the boundaries of the parent.
         </p>
     </li>
@@ -66,10 +66,10 @@ Dragon - smart scrolling jQuery plugin for correct scrolling mechanics
         </p>
     </li>
     <li>
-        <h2>Touch scroll (in developing)</h2>
+        <h2>Touch scroll (beta)</h2>
         <p>
-            Use default touch action for scrolling content on tablet. 
-            Smart touch scrolling in development.
+            Scroll content in all direction.
+            Propagate not ended event to parent block.
         </p>
     </li>
 </ul>
@@ -125,12 +125,15 @@ Example:
 </pre>
 
 <h3>Triggers</h3>
+<p> 'DragOn.option' - set/get DragOn parameters. </p> 
 <p> 'DragOn.toggle' - enable/disable functionality of DragOn (include plug-ins). </p> 
 <p> 'DragOn.remove' - destroy DragOn object. </p>
 <p> Trigger can be initialized on DragOn root or any children block.</p>
 Usage:
 <pre>
-	$( [selector] ).trigger('DragOn.toggle');
+	$( [selector] ).trigger('DragOn.toggle'); 		    //toggle state
+	$( [selector] ).trigger('DragOn.option',[{easing:false}]);  //turn off easing 
+	$( [selector] ).triggerHandler('DragOn.option',['easing']);  //return easing state
 </pre>
 
 <h3>Data- flags</h3>

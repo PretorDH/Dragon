@@ -1,9 +1,5 @@
 ﻿/**
-<<<<<<< HEAD
- * jQuery.Drag-On v2.7.0
-=======
  * jQuery.Drag-On v2.7.3
->>>>>>> 7e05291b4b7b11644ceae9bc98941d05d72122e9
  * @author Dark Heart aka PretorDH
  * @site dragon.deparadox.com
  * MIT license
@@ -156,11 +152,7 @@ $(function () {
                 onHold: function (e) {        
                     _this.moment={};
                     var o=_this.opt,b,et = (e.target.tagName || e.target.localName || e.target.nodeName).toLowerCase(),
-<<<<<<< HEAD
-						E=e.type.indexOf('touch')+1?e.touches[0]:e;
-=======
-						E=e.type.indexOf('touch')+1?e.originalEvent.touches[0]:e;
->>>>>>> 7e05291b4b7b11644ceae9bc98941d05d72122e9
+					E=e.type.indexOf('touch')+1?e.originalEvent.touches[0]:e;
                     if (et in o.exclusion) return;
                   
                     S.too = S.to = $((this === e.target) ? this : e.target);
@@ -186,11 +178,7 @@ $(function () {
                 onDragg: function (e) {
                     _this.SAH && (_this.SAH.off('scroll', _this.onScrollAfterHold), _this.SAH = null);
                     
-<<<<<<< HEAD
-                    var E=e.type=='touchmove'?e.touches[0]:e;
-=======
                     var E=e.type=='touchmove'?e.originalEvent.touches[0]:e;
->>>>>>> 7e05291b4b7b11644ceae9bc98941d05d72122e9
                     if (!e.touches && _this.noButtonHold || !(e.which + e.button)) return _this.onRelease(e);
                     e.preventDefault(); e.stopPropagation();
 
@@ -204,11 +192,7 @@ $(function () {
                     _this.setCurPos(dx*_this.mx, dy*_this.my);
                 },
                 onRelease: function (e) {
-<<<<<<< HEAD
-                	var sm,o,E=e.type.indexOf('touch')+1?e.touches[0]:e;
-=======
                 	var sm,o,E=e.type.indexOf('touch')+1?e.originalEvent.touches[0]:e; 
->>>>>>> 7e05291b4b7b11644ceae9bc98941d05d72122e9
                 	(o=_this.opt).easing && (sm=_this.moment) &&
                 		(sm.vector={y:E.screenY-sm.y,x:E.screenX-sm.x},
                 		 sm.snatch=(+new Date()-sm.startTime),

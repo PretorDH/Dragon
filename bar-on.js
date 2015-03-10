@@ -8,6 +8,18 @@
 
 $(function () {
 
+Object.defineProperty(Node.prototype,'realStyle',{
+	get : function(){
+		return this.currentStyle || window.getComputedStyle(this);
+	},
+	set : function(a){
+		if (typeof(a)!=='object') return undefined;
+		var ts=this.style;
+		for (var b in a) ts[b]=a[b];
+		return this;			
+	}
+});
+
 $.fn.extend({
     barOn: function (opt) {
     	$(this).each(function(){jQuery.BarOn(this, opt)});
@@ -26,74 +38,80 @@ $.extend({
 			            (rB=$('.rBarOn',S)).length || (rB=S.append('<div class="rBarOn" style="position:absolute"></div>').children('.rBarOn'));
 			            (bB=$('.bBarOn',S)).length || (bB=S.append('<div class="bBarOn" style="position:absolute"></div>').children('.bBarOn'));           
 			            Bo.onDoModification(Bo.clearScroll);
-			            S.on({'scroll':Bo.onScroll,'mousemove':Bo.onHover});
-			            $(window).on('resize',Bo.drawScroll);
+			            S.on({'scroll.baron':Bo.onScroll,'mousemove.baron':Bo.onHover}); //
+			            $(window).on('resize.baron',Bo.drawScroll);
 			        } else {
 			            $('.rBarOn,.bBarOn',S).remove();
-			            S.off({'scroll':Bo.onScroll,'mousemove':Bo.onHover});
-			            $(window).off('resize',Bo.drawScroll);
+			            S.off({'scroll.baron':Bo.onScroll,'mousemove.baron':Bo.onHover}); //
+			            $(window).off('resize.baron',Bo.drawScroll);
 			            Bo.onDoModification(Bo.restoreScroll);
 			        }
 			        Bo.on=!Bo.on;
             	},
             	drawScroll : function (e) {
-            		if (!S||!S.to||!S.to[0]) return;
-            		var a,t,ox=true,oy=true,ih,sh,iw,sw;
-            		rB.css({top:0,bottom:0,right:0});
-            		bB.css({bottom:0,left:0,right:0});
+            		function round(v) {return (v+(v>0?.5:-.5))<<1>>1}
+            		var SS,Sto,a,t,ox=true,oy=true,ih,sh,iw,sw,srB,sbB;
+            		if (!(SS=S)||!(Sto=S.tb)||!Sto[0]) return;
+            		rB[0].realStyle=srB={ top:0,bottom:0,right:0,display:'none'};
+            		bB[0].realStyle=sbB={left:0,bottom:0,right:0,display:'none'};
             		do {
-            			while ( S.to[0]!=S[0] && (t=S.to.css('overflow')) in Bo.doList ) {
-            				if ( t in Bo.doList ) {
-            					Bo.clearScroll(null,S.to)?S.to=S.to.parent():null;
-            				} else S.to=S.to.parent();
-            			};
-            			if (ox && S.to.data('overflow-x') in Bo.doList) {
-		            		S.to.append(bB);
-            				if ((sw=S.to[0].scrollWidth)-(iw=bB.width())>2) {
-            					ox=false;        //(sw-(t=S.to.scrollLeft())>iw) && t;
-            					bB.css({
-            					'left':parseInt(t=S.to.scrollLeft()*(1+(a=iw/sw))),
-            					'bottom':parseInt( -S.to.scrollTop()+((sh=S.to.height()+S.to.position().top-S.to.offsetParent().height())>0?sh:0) ),
-            					'right':parseInt((sw-iw)*a-t+1)});
+            			while ( Sto && Sto[0]!=S[0] && (t=Sto[0].realStyle.overflow in Bo.doList) ) 
+           					Bo.clearScroll(null,Sto)?Sto=Sto.parent():null;
+            			if (ox && Sto.data('overflow-x') in Bo.doList) {
+		            		Sto.append(bB);
+            				if ((sw=Sto[0].scrollWidth)-(iw=bB.width())>2) {
+            					sbB.left = round(t=Sto[0].scrollLeft*(1+(a=iw/sw)))+'px';
+            					sbB.bottom = round( -Sto[0].scrollTop+((sh=Sto.height()+Sto.position().top-Sto.offsetParent().height())>0?sh:0) )+'px';
+            					sbB.right = round((sw-iw)*a-t+1)+'px';
+            					sbB.display = 'block';
+            					ox=false;
             				};
             			};
-            			if (oy && S.to.data('overflow-y') in Bo.doList) {
-		            		S.to.append(rB);
-	            			if ((sh=S.to[0].scrollHeight)-(ih=rB.height())>2) {
-	            				oy=false;        //(sh-(t=S.to.scrollTop())>ih) && t;
-	            				rB.css({
-	            				'top':parseInt( t=S.to.scrollTop()*(1+(a=ih/sh)) ),
-            					'right':parseInt( -S.to.scrollLeft()+((sw=S.to.width()+S.to.position().left-S.to.offsetParent().width())>0?sw:0) ),
-	            				'bottom':parseInt((sh-ih)*a-t+1)});
+            			if (oy && Sto.data('overflow-y') in Bo.doList) {
+		            		Sto.append(rB);
+	            			if ((sh=Sto[0].scrollHeight)-(ih=rB.height())>2) {
+	            				srB.top = round( t=Sto[0].scrollTop*(1+(a=ih/sh)) )+'px';
+            					srB.right = round( -Sto[0].scrollLeft+((sw=Sto.width()+Sto.position().left-Sto.offsetParent().width())>0?sw:0) )+'px';
+	            				srB.bottom = round((sh-ih)*a-t+1)+'px';
+	            				srB.display = 'block';
+	            				oy=false;
 	            			};
             			};
-	            	} while ( (ox||oy) && (S.to[0]!=S[0]) && (S.to=S.to.parent()) );
-	            	rB.css({display:( oy?'none':'block' )});
-	            	bB.css({display:( ox?'none':'block' )});
+	            	} while ( (ox||oy) && (Sto[0]!=SS[0]) && (Sto=Sto.parent()) );
+            		if (srB.display!='none') {
+		            	sh=rB.parent();rB.detach();
+            			rB[0].realStyle=srB;
+            			sh.append(rB);
+            		};
+            		if (sbB.display!='none') {
+		            	sw=bB.parent();bB.detach();
+	            		bB[0].realStyle=sbB;
+            			sw.append(bB);
+            		};
             	},
             	onScroll : function (e,x,y) {
             		var et;
-            		if (S.too) {
-	            		S.to=(S.too.parents().filter(et=$(e.target)).length)?S.too:(S.too=et);
+            		if (S.tob) {
+	            		S.tb=(S.tob.parents().filter(et=$(e.target)).length)?S.tob:(S.tob=et);
 	            		Bo.drawScroll(e);
             		}
             	},
             	onHover : function (e) {
-            		if ((S.to = $(e.target))[0]==(S.too||[''])[0]) return;
-            		S.too=S.to;
+            		if ((S.tb = $(e.target))[0]==(S.tob||[''])[0]) return;
+            		S.tob=S.tb;
             		Bo.drawScroll(e);
             	},
             	onDoModification : function(e){	
-			$('*',S).add(S).each(e);
+		            $('*',S).add(S).each(e);
             	},
             	clearScroll : function (j,s) {
             		var i=true,
             			dx=(s=$(s)).css('overflow-x'), dxd=s.data('overflow-x'), ps = s.css('position'),
             			dy=       s.css('overflow-y'), dyd=s.data('overflow-y'), pso = (ps=='static')?{position:'relative'}:{} ;            		
-           		if (dx in Bo.doList && dxd!='no-baron') (s.data('overflow-x',dx),(pso['overflow-x']='hidden'),i=false);
-           		if (dy in Bo.doList && dyd!='no-baron') (s.data('overflow-y',dy),(pso['overflow-y']='hidden'),i=false);
-           		i || s.css(pso);
-           		if (j==null) return i;
+	           		if (dx in Bo.doList && dxd!='no-baron') (s.data('overflow-x',dx),(pso['overflow-x']='hidden'),i=false);
+	           		if (dy in Bo.doList && dyd!='no-baron') (s.data('overflow-y',dy),(pso['overflow-y']='hidden'),i=false);
+		           	i || s.css(pso);
+	           		if (j==null) return i;
             	},
             	restoreScroll : function (j,s) {
             		var s=$(s),
@@ -109,6 +127,7 @@ $.extend({
             
             (("Info" in window) && Info||console).log('BarOn enter...');
             return Bo;
+
         }
 	});
 

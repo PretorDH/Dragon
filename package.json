@@ -1,0 +1,50 @@
+{
+  "name": "Dragon",
+  "version": "2.8.1",
+  "description": "jQuery plugin for ajust scrolling mechanics & scrollbars",
+  "title": "jQuery DragOn - smart scrolling",
+  "main": "drag-on.js",
+  "scripts": {
+    "test": "$('.dragon').dragOn()"
+  },
+  "repository": "https://github.com/PretorDH/Dragon",
+  "keywords": [
+    "ui",
+    "input",
+    "jquery",
+    "scroll",
+    "pan",
+    "wheel",
+    "hold",
+    "easing",
+    "drag"
+  ],
+  "author": "PretorDH, Deparadox LLC and other contributors",
+  "owner": {
+    "name": "PretorDH, Deparadox LLC and other contributors",
+    "url": "http://dragon.deparadox.com/#about"
+  },
+  "maintainers": [
+    {
+      "name": "PretorDH",
+      "email": "pretordh@deparadox.com",
+      "url": "http://www.deparadox.com"
+    }
+  ],
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/PretorDH/Dragon/blob/master/LICENSE.md"
+    }
+  ],
+  "bugs": {
+    "url": "https://github.com/PretorDH/Dragon/issues"
+  },
+  "homepage": "http://dragon.deparadox.com",
+  "docs": "http://dragon.deparadox.com/#get",
+  "download": "http://dragon.deparadox.com/drag-on.js",
+  "dependencies": {
+    "jquery": ">=1.8"
+  },
+  "jquery-plugin": "ecosystem:jquery"
+}

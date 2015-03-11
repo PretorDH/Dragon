@@ -187,7 +187,7 @@ Usage:
 
 Usage:
 <pre>
-	&lt;body class='dragon'>
+	&lt;body class='dragon baron'>
         [content] 
 		&lt;div data-overflow-x="no-baron" data-overflow-y="no-baron">
 		[content]

@@ -1,5 +1,5 @@
 ﻿/**
- * jQuery.Drag-On v2.8.1
+ * jQuery.Drag-On v2.8.2
  * @author Dark Heart aka PretorDH
  * @site dragon.deparadox.com
  * MIT license
@@ -86,10 +86,10 @@ $(function () {
                         cp = _this.getCurPos();
                         (cp.maxY > 0) && ((dy>0?dy:-dy) > (dx>0?dx:-dx))
 							&& ((cp.maxX > 0) || (dx = 0), ddy = (cp.t - (ddy = _this.round((cp.maxY / cp.ph + 1) * dy)) < 0) ? cp.t : (cp.t - ddy > cp.maxY ? cp.t - cp.maxY : ddy))
-							&& (S.to[0].scrollTop = cp.t - ddy,true) && ( (t = S.to[0].scrollTop != cp.t) && (dy = 0, S.to.trigger('scroll')) ); 
+							&& ( S.to[0].scrollTop = cp.t - ddy,true ) && ( (t = S.to[0].scrollTop != cp.t) && (dy = 0, S.to.trigger('scroll')) ); 
                         (cp.maxX > 0) && ((dx>0?dx:-dx) > (dy>0?dy:-dy))
-							&& (dy = 0, ddx = (cp.l - (ddx = _this.round((cp.maxX / cp.pw + 1) * dx)) < 0) ? cp.l : (cp.l - ddx > cp.maxX ? cp.l - cp.maxX : ddx))
-							&& (S.to[0].scrollLeft = cp.l - ddx,true) && ( (l = S.to[0].scrollLeft != cp.l) && (dx = 0,S.to.trigger('scroll')) );
+							&& ( dy = 0, ddx = (cp.l - (ddx = _this.round((cp.maxX / cp.pw + 1) * dx)) < 0) ? cp.l : (cp.l - ddx > cp.maxX ? cp.l - cp.maxX : ddx) )
+							&& ( S.to[0].scrollLeft = cp.l - ddx,true) && ( (l = S.to[0].scrollLeft != cp.l) && (dx = 0,S.to.trigger('scroll')) );
 						if ((dy && t) || (dx && l) || S[0]==S.to[0]) return;
 						S.to=S.to.parent();
                     };
@@ -147,12 +147,12 @@ $(function () {
                     _this.moment={};
                     var o=_this.opt,b,et = (e.target.tagName || e.target.localName || e.target.nodeName).toLowerCase(),
 						E=e.type.indexOf('touch')+1?e.originalEvent.touches[0]:e;
-                    if (et in o.exclusion) return false;
+                    if (et in o.exclusion) return;
                   
                     S.too = S.to = $((this === e.target) ? this : e.target);
                     _this.mx=S.to.hasClass('bBarOn')?-1:1;
                     _this.my=S.to.hasClass('rBarOn')?-1:1;
-                    if ( _this.mx+_this.my>0 && S.to.parents(o.exclusion.id).length ) return false;
+                    if ( _this.mx+_this.my>0 && S.too.closest(o.exclusion.id).length ) return;
                     
                     ('mousedown'.indexOf(e.type)+1) && (e.preventDefault(), e.stopPropagation());
 					
@@ -229,7 +229,7 @@ $(function () {
 									&& (so.top >=0 || ek<0 && so.top >=ek) )
 								)) 
 							(to=to.slice(1)).length || (to=too=too.children());
-	                	S.too = to.eq(0);
+	                	S.too = to.eq(0) || S.too;
                 	};                	
                 	             	               	
 					_this.onReleaseEasing();

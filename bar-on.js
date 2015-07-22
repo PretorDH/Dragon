@@ -1,5 +1,5 @@
-﻿/**
- * jQuery.Bar-On v0.4.4
+/**
+ * jQuery.Bar-On v0.4.5
  * @author Dark Heart aka PretorDH
  * @site dragon.deparadox.com/#baron
  * MIT license

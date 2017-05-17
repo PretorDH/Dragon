@@ -1,5 +1,5 @@
 ﻿/**
- * jQuery.Drag-On v2.8.3
+ * jQuery.Drag-On v2.8.4
  * @author Dark Heart aka PretorDH
  * @site dragon.deparadox.com
  * MIT license
@@ -23,11 +23,13 @@ $(function () {
             	releaseEvents : 'mouseup.dragon touchend.dragon',
             	wheelEvents : 'mousewheel.dragon wheel.dragon',
             	leaveEvents : 'mouseleave.dragon touchleave.dragon touchcancel.dragon',
+            	touchEvents : 'touchstart.dragon touchmove.dragon touchcancel.dragon touchend.dragon',
             	easing : 'true'
             },_this;
             
             function onPrevent(E) {
                 var e = E || event, et = (e && e.target && (e.target.tagName || e.target.localName || e.target.nodeName).toLowerCase());
+                if ( def.touchEvents.indexOf( E.type )>=0 ) return;
                 return e && et && (et in _this.opt.exclusion || (e.target.href || $(e.target).parents().attr('href') && (e.stopPropagation && e.stopPropagation(), true)))
 				   || (e && e.preventDefault && e.preventDefault(), e.stopPropagation && e.stopPropagation(), false);
             };
@@ -81,9 +83,10 @@ $(function () {
                 },
                 setCurPos: function (dx, dy) {
                     var t, l, cp=S.to, ddy, ddx, w=_this.mx<0 || _this.my<0;
+                    
                     dy = (dy>32 || dy<-32)?dy/this.abs(dy)<<5:dy;
                     dy = (dx>32 || dx<-32)?dx/this.abs(dx)<<5:dx;
-
+                    
                     while (S.to=_this.scrollParent(S.to, w)) {
                         cp = _this.getCurPos();
                         (cp.maxY > 0) && ((dy>0?dy:-dy) > (dx>0?dx:-dx))
@@ -175,14 +178,16 @@ $(function () {
                     _this.SAH && (_this.SAH.off('scroll.dragon', _this.onScrollAfterHold), _this.SAH = null);
                     var	E=e.type.indexOf('touch')+1?e.originalEvent[e.originalEvent.touches.length?'touches':'changedTouches'][0]:e;
 
-                    if (!(e.originalEvent.touches || e.originalEvent.changedTouches) && _this.noButtonHold && !(e.which + e.button)) return _this.onRelease(e);
-                    e.preventDefault(); e.stopPropagation();
+                    if (!(e.originalEvent.touches || e.originalEvent.changedTouches) && _this.noButtonHold && !(e.which + e.button)) 
+                    	return _this.onRelease(e);
+                    if ( def.touchEvents.indexOf( e.type )+1 )
+	                    e.preventDefault(), e.stopPropagation();
 
                     var x = E.screenX, 
                     	y = E.screenY,
 						dx = x - S.holdPos.x, 
 						dy = y - S.holdPos.y;
-                    S.to = $(this===e.target?this:e.target);            
+                    S.to = $(this===e.target?this:e.target);
                     S.holdPos = { 'x': x, 'y': y };
                     
                     _this.setCurPos(dx*_this.mx, dy*_this.my);

@@ -85,7 +85,7 @@ $(function () {
                     var t, l, cp=S.to, ddy, ddx, w=_this.mx<0 || _this.my<0;
                     
                     dy = (dy>32 || dy<-32)?dy/this.abs(dy)<<5:dy;
-                    dy = (dx>32 || dx<-32)?dx/this.abs(dx)<<5:dx;
+                    dx = (dx>32 || dx<-32)?dx/this.abs(dx)<<5:dx;
                     
                     while (S.to=_this.scrollParent(S.to, w)) {
                         cp = _this.getCurPos();

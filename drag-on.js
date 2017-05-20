@@ -1,5 +1,5 @@
 ﻿/**
- * jQuery.Drag-On v2.8.4
+ * jQuery.Drag-On v2.8.6
  * @author Dark Heart aka PretorDH
  * @site dragon.deparadox.com
  * MIT license
@@ -119,13 +119,14 @@ $(function () {
 				},
                 onWhell: function (e, delta) { 
                 	if (_this.bypass) return (_this.bypass=false,true);
-
+					var cnd = $(e.target).closest('[data-overflow=no-dragon]');
+					
                     _this.moment={};
                     var SSto,cp,st,sl,t,l,ph,pw,et,ad
                     
                     	E = e.originalEvent;     
 					_this.mx = 1; _this.my = 1;
-                    S.to = $((this === e.target) ? this : e.target);
+                    S.to = $( cnd.length? cnd.parent(): e.target );
 
                     delta = _this.round(delta || (E.wheelDelta || E.wheelDeltaY || E.wheelDeltaX ) >> 1 || (-(E.deltaX || E.deltaY || E.deltaZ)<<(E.deltaMode && E.deltaMode<<2)<<1));
                     ad=_this.abs(delta>>1);
@@ -176,10 +177,12 @@ $(function () {
                 },
                 onDragg: function (e) {
                     _this.SAH && (_this.SAH.off('scroll.dragon', _this.onScrollAfterHold), _this.SAH = null);
-                    var	E=e.type.indexOf('touch')+1?e.originalEvent[e.originalEvent.touches.length?'touches':'changedTouches'][0]:e;
 
                     if (!(e.originalEvent.touches || e.originalEvent.changedTouches) && _this.noButtonHold && !(e.which + e.button)) 
                     	return _this.onRelease(e);
+
+                    var	E=e.type.indexOf('touch')+1?e.originalEvent[e.originalEvent.touches.length?'touches':'changedTouches'][0]:e;
+                    var cnd = $(e.target).closest('[data-overflow=no-dragon]');
                     if ( def.touchEvents.indexOf( e.type )+1 )
 	                    e.preventDefault(), e.stopPropagation();
 
@@ -187,7 +190,7 @@ $(function () {
                     	y = E.screenY,
 						dx = x - S.holdPos.x, 
 						dy = y - S.holdPos.y;
-                    S.to = $(this===e.target?this:e.target);
+                    S.to = $(cnd.length? cnd.parent(): e.target);
                     S.holdPos = { 'x': x, 'y': y };
                     
                     _this.setCurPos(dx*_this.mx, dy*_this.my);

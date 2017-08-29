@@ -48,7 +48,8 @@ Dragon - smart scrolling jQuery plugin. Ajust scroll mechanics and customize scr
             Do not created any wrappers for scrolled block.
             Only two auxiliary blocks will created for object BarOn.
             Only one instance of object BarOn will support Scrollbars for all child blocks.
-
+        </p>
+        <p>
             Bars style fully specified in CSS.
             Worked under model of scroll event.
         </p>

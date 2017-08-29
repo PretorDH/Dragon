@@ -155,16 +155,16 @@ Usage:
 <h3>How to use...</h3>
 
 <pre>
-    &lt;head>
+    <head>
         ...
-        &lt;script src="//code.jquery.com/jquery-latest.js"></script> 
-        &lt;script src="[path]/drag-on.js"></script> 
-        &lt;script src="[path]/bar-on.js"></script> 
+        <script src="//code.jquery.com/jquery-latest.js"></script> 
+        <script src="[path]/drag-on.js"></script> 
+        <script src="[path]/bar-on.js"></script> 
         ...
-    &lt;/head>
-    &lt;body class='dragon'>
+    </head>
+    <body class='dragon baron'>
         [content] 
-    &lt;/body>
+    </body>
 </pre>
 
 <p>Include the <b>bar-on.js</b> in header and all block with class "dragon" will be with unique scrollbars. 
@@ -187,13 +187,13 @@ Usage:
 
 Usage:
 <pre>
-	&lt;body class='dragon baron'>
+	<body class='dragon baron'>
         [content] 
-		&lt;div data-overflow-x="no-baron" data-overflow-y="no-baron">
+		<div data-overflow-x="no-baron" data-overflow-y="no-baron">
 		[content]
-		&lt;/div>
+		</div>
         [content] 
-	&lt;/body>
+	</body>
 </pre>
 
 <h3>Style example...</h3>

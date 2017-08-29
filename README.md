@@ -85,8 +85,8 @@ Dragon - smart scrolling jQuery plugin. Ajust scroll mechanics and customize scr
 <pre>
     &lt;head>
       ...
-      &lt;script src="//code.jquery.com/jquery-latest.js"></script> 
-      &lt;script src="[path]/drag-on.js"></script> 
+      &lt;script src="//code.jquery.com/jquery-latest.js">&lt;/script> 
+      &lt;script src="[path]/drag-on.js">&lt;/script> 
       ...
     &lt;/head>
     &lt;body class='dragon'>
@@ -157,9 +157,9 @@ Usage:
 <pre>
     &lt;head>
         ...
-        &lt;script src="//code.jquery.com/jquery-latest.js"></script> 
-        &lt;script src="[path]/drag-on.js"></script> 
-        &lt;script src="[path]/bar-on.js"></script> 
+        &lt;script src="//code.jquery.com/jquery-latest.js">&lt;/script> 
+        &lt;script src="[path]/drag-on.js">&lt;/script> 
+        &lt;script src="[path]/bar-on.js">&lt;/script> 
         ...
     &lt;/head>
     &lt;body class='dragon baron'>
